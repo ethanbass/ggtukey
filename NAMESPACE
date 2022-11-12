@@ -2,9 +2,11 @@
 
 export("%>%")
 export(boxplot_letters)
+export(is.color)
 import(dplyr)
 import(egg)
 import(ggplot2)
+import(grDevices)
 import(multcompView)
 import(rlang)
 importFrom(magrittr,"%>%")

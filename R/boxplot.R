@@ -2,11 +2,12 @@
 #' @param data A data.frame in long format
 #' @param x variable to plot on x axis
 #' @param y variable to plot on y axis
+#' @param fill column or color to fill boxplots
 #' @param raw whether to plot raw data and (if so) which format
-#' @param pt_col color of points if \code{raw} is set to \code{points} or
-#' \code{dots}.
-#' @param ... additional arguments to \code{\link[ggplot2]{geom_point}} or
-#' \code{\link[ggplot2]{geom_dotplot}}, according to the value of \code{raw}.
+#' @param pt_col Color of points, if raw data is plotted.
+#' @param ... Additional arguments to \code{\link[ggplot2]{geom_point}},
+#' \code{\link[ggplot2]{geom_dotplot}}, or \code{\link[ggplot2]{geom_jitter}},
+#' according to the value of \code{raw}.
 #' @import dplyr
 #' @import egg
 #' @import multcompView
@@ -20,9 +21,11 @@
 #'                         "Value" = c(rnorm(10, 5), rnorm(10, 5.5), rnorm(10, 10)))
 #' boxplot_letters(data, Category, Value)
 #' @export
-boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots'),
+
+boxplot_letters <- function(data, x, y, fill,
+                            raw = c('none', 'points', 'dots', 'jitter'),
                             pt_col = "slategray", ...){
-  raw <- match.arg(raw, c('none', 'points', 'dots'))
+  raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
 
   x.c <- deparse(substitute(x))
   y.c <- deparse(substitute(y))
@@ -46,9 +49,17 @@ boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots'),
   colnames(placement)[2] <- "Placement.Value"
   letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
 
+  if (missing(fill)){
+    geom_box <- purrr::partial(geom_boxplot, color = "black", alpha = 0)
+  } else if (deparse(substitute(fill)) %in% colnames(data)){
+    geom_box <- purrr::partial(geom_boxplot, color = "black", aes(fill = {{fill}}))
+  } else if (is.color(fill)){
+    geom_box <- purrr::partial(geom_boxplot, color = "black", fill = {{fill}})
+  }
+
   p <- data %>% #Dataframe from which data will be drawn
     ggplot(aes(x = reorder({{x}}, {{y}}, median), y = {{y}})) + #Instead of hard-coding a factor reorder, you can call it within the plotting function
-    geom_boxplot(color = "black", alpha = 0) + #I like to set the color of boxplots to black with the alpha at 0 (fully transparent). I also like geom_jitter() but do not use it here for simplicity.
+    geom_box() +
     theme_article() + #Clean, minimal theme courtesy of the "egg" package
     xlab(x.c) +
     geom_text(data = letters.df, aes(x = {{x}},
@@ -62,5 +73,7 @@ boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots'),
     p + geom_point(position = position_dodge(0.1), col=pt_col, ...)
   } else if (raw == "dots"){
     p + geom_dotplot(binaxis='y', stackdir='center', fill=pt_col, ...)
+  } else if (raw == "jitter"){
+    p + geom_jitter(col=pt_col, ...)
   } else p
 }

@@ -8,7 +8,8 @@ boxplot_letters(
   data,
   x,
   y,
-  raw = c("none", "points", "dots"),
+  fill,
+  raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
   ...
 )
@@ -20,13 +21,15 @@ boxplot_letters(
 
 \item{y}{variable to plot on y axis}
 
+\item{fill}{column or color to fill boxplots}
+
 \item{raw}{whether to plot raw data and (if so) which format}
 
-\item{pt_col}{color of points if \code{raw} is set to \code{points} or
-\code{dots}.}
+\item{pt_col}{Color of points, if raw data is plotted.}
 
-\item{...}{additional arguments to \code{\link[ggplot2]{geom_point}} or
-\code{\link[ggplot2]{geom_dotplot}}, according to the value of \code{raw}.}
+\item{...}{Additional arguments to \code{\link[ggplot2]{geom_point}},
+\code{\link[ggplot2]{geom_dotplot}}, or \code{\link[ggplot2]{geom_jitter}},
+according to the value of \code{raw}.}
 }
 \description{
 Create ggplot boxplot with Tukey HSD letters
