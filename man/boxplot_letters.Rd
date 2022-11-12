@@ -4,7 +4,14 @@
 \alias{boxplot_letters}
 \title{Create ggplot boxplot with Tukey HSD letters}
 \usage{
-boxplot_letters(data, x, y, raw = c("none", "points", "dots"))
+boxplot_letters(
+  data,
+  x,
+  y,
+  raw = c("none", "points", "dots"),
+  pt_col = "slategray",
+  ...
+)
 }
 \arguments{
 \item{data}{A data.frame in long format}
@@ -14,6 +21,12 @@ boxplot_letters(data, x, y, raw = c("none", "points", "dots"))
 \item{y}{variable to plot on y axis}
 
 \item{raw}{whether to plot raw data and (if so) which format}
+
+\item{pt_col}{color of points if \code{raw} is set to \code{points} or
+\code{dots}.}
+
+\item{...}{additional arguments to \code{\link[ggplot2]{geom_point}} or
+\code{\link[ggplot2]{geom_dotplot}}, according to the value of \code{raw}.}
 }
 \description{
 Create ggplot boxplot with Tukey HSD letters

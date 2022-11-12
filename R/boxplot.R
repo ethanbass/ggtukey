@@ -3,6 +3,10 @@
 #' @param x variable to plot on x axis
 #' @param y variable to plot on y axis
 #' @param raw whether to plot raw data and (if so) which format
+#' @param pt_col color of points if \code{raw} is set to \code{points} or
+#' \code{dots}.
+#' @param ... additional arguments to \code{\link[ggplot2]{geom_point}} or
+#' \code{\link[ggplot2]{geom_dotplot}}, according to the value of \code{raw}.
 #' @import dplyr
 #' @import egg
 #' @import multcompView
@@ -16,7 +20,8 @@
 #'                         "Value" = c(rnorm(10, 5), rnorm(10, 5.5), rnorm(10, 10)))
 #' boxplot_letters(data, Category, Value)
 #' @export
-boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots')){
+boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots'),
+                            pt_col = "slategray", ...){
   raw <- match.arg(raw, c('none', 'points', 'dots'))
 
   # if (is.character(x) | is.character(y)){
@@ -54,8 +59,8 @@ boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots')){
               fontface = "bold")
 
   if (raw == "points"){
-    p + geom_point(position = position_dodge(0.1), col="slategray")
+    p + geom_point(position = position_dodge(0.1), col=pt_col, ...)
   } else if (raw == "dots"){
-    p + geom_dotplot(binaxis='y', stackdir='center', stack.ratio=1.5)
+    p + geom_dotplot(binaxis='y', stackdir='center', fill=pt_col, ...)
   } else p
 }
