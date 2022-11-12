@@ -1,0 +1,12 @@
+Package: ggpubfigroutr
+Title: A collection of ggplot functions for publications
+Version: 0.0.1
+Authors@R: 
+    person("Ethan", "Bass", , "ethanbass@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6175-6739"))
+Maintainer: Ethan Bass <ethanbass@gmail.com>
+Description: A collection of ggplot functions for publications
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
