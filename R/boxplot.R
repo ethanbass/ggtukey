@@ -3,9 +3,11 @@
 #' @param x variable to plot on x axis
 #' @param y variable to plot on y axis
 #' @param raw whether to plot raw data and (if so) which format
-#' @import tidyverse
+#' @import dplyr
 #' @import egg
 #' @import multcompView
+#' @import ggplot2
+#' @importFrom stats TukeyHSD aov as.formula median quantile reorder
 #' @import rlang
 #' @author Ethan Bass
 #' @note Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots
@@ -13,7 +15,7 @@
 #' data <- data.frame("Category" = c(rep("Low", 10), rep("Medium", 10), rep("High", 10)),
 #'                         "Value" = c(rnorm(10, 5), rnorm(10, 5.5), rnorm(10, 10)))
 #' boxplot_letters(data, Category, Value)
-
+#' @export
 boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots')){
   raw <- match.arg(raw, c('none', 'points', 'dots'))
 
@@ -44,7 +46,12 @@ boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots')){
     geom_boxplot(color = "black", alpha = 0) + #I like to set the color of boxplots to black with the alpha at 0 (fully transparent). I also like geom_jitter() but do not use it here for simplicity.
     theme_article() + #Clean, minimal theme courtesy of the "egg" package
     xlab(x.c) +
-    geom_text(data = letters.df, aes(x = {{x}}, y = Placement.Value, label = Letter), size = 4, color = "black", hjust = -1.25, vjust = -0.8, fontface = "bold")
+    geom_text(data = letters.df, aes(x = {{x}},
+                                     y = .data$Placement.Value,
+                                     label = .data$Letter),
+              size = 4, color = "black",
+              hjust = -1.25,vjust = -0.8,
+              fontface = "bold")
 
   if (raw == "points"){
     p + geom_point(position = position_dodge(0.1), col="slategray")
