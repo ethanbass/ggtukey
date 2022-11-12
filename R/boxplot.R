@@ -39,7 +39,7 @@ boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots')){
     summarise(quantile({{y}})[4])
 
   colnames(placement)[2] <- "Placement.Value"
-  letters.df <- left_join(letters.df, placement) #Merge dataframes
+  letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
 
   p <- data %>% #Dataframe from which data will be drawn
     ggplot(aes(x = reorder({{x}}, {{y}}, median), y = {{y}})) + #Instead of hard-coding a factor reorder, you can call it within the plotting function
