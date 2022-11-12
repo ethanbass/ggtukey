@@ -24,12 +24,12 @@ boxplot_letters <- function(data, x, y, raw = c('none', 'points', 'dots'),
                             pt_col = "slategray", ...){
   raw <- match.arg(raw, c('none', 'points', 'dots'))
 
-  # if (is.character(x) | is.character(y)){
-  #   stop("Variables should be provided directly. Please do not use quotes!")
-  # }
-
   x.c <- deparse(substitute(x))
   y.c <- deparse(substitute(y))
+
+  if (grepl('\"', x.c) | grepl('\"', y.c)){
+    stop("X and Y variables should be provided directly. Please do not use quotes!")
+  }
 
   # get letters
   form <- as.formula(paste(y.c, x.c, sep="~"))
