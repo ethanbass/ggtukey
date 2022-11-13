@@ -9,6 +9,7 @@ boxplot_letters(
   x,
   y,
   fill,
+  group,
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
   ...
@@ -22,6 +23,8 @@ boxplot_letters(
 \item{y}{variable to plot on y axis}
 
 \item{fill}{column or color to fill boxplots}
+
+\item{group}{grouping variable (to allow faceting)}
 
 \item{raw}{whether to plot raw data and (if so) which format}
 

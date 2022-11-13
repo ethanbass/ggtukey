@@ -3,6 +3,7 @@
 #' @param x variable to plot on x axis
 #' @param y variable to plot on y axis
 #' @param fill column or color to fill boxplots
+#' @param group grouping variable (to allow faceting)
 #' @param raw whether to plot raw data and (if so) which format
 #' @param pt_col Color of points, if raw data is plotted.
 #' @param ... Additional arguments to \code{\link[ggplot2]{geom_point}},
@@ -22,33 +23,27 @@
 #' boxplot_letters(data, Category, Value)
 #' @export
 
-boxplot_letters <- function(data, x, y, fill,
+boxplot_letters <- function(data, x, y, fill, group,
                             raw = c('none', 'points', 'dots', 'jitter'),
                             pt_col = "slategray", ...){
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
 
-  x.c <- deparse(substitute(x))
-  y.c <- deparse(substitute(y))
+  x.s <- deparse(substitute(x))
+  y.s <- deparse(substitute(y))
 
-  if (grepl('\"', x.c) | grepl('\"', y.c)){
+  if (grepl('\"', x.s) | grepl('\"', y.s)){
     stop("X and Y variables should be provided directly. Please do not use quotes!")
   }
 
-  # get letters
-  form <- as.formula(paste(y.c, x.c, sep="~"))
-  letters.df <- data.frame(multcompLetters(TukeyHSD(aov(form, data = data))[[x.c]][,4])$Letters)
-  letters.df
-
-  colnames(letters.df)[1] <- "Letter" #Reassign column name
-  letters.df[[x.c]] <- rownames(letters.df) #Create column based on rownames
-
-  placement <- data %>% #We want to create a dataframe to assign the letter position.
-    group_by({{x}}) %>%
-    summarise(quantile({{y}})[4])
-
-  colnames(placement)[2] <- "Placement.Value"
-  letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
-
+  # get tukey letters
+  if (missing(group)){
+    letters.df <- get_tukey_letters(data, x=x.s, y=y.s)
+  } else{
+  letters.df <- purrr::map_dfr(unique(data[[deparse(substitute(group))]]), function(pk){
+    data %>% filter({{group}} == pk) %>% get_tukey_letters(x=x.s, y=y.s) %>%
+      mutate({{group}} := pk) %>% tibble::remove_rownames()
+  })
+  }
   if (missing(fill)){
     geom_box <- purrr::partial(geom_boxplot, color = "black", alpha = 0)
   } else if (deparse(substitute(fill)) %in% colnames(data)){
@@ -61,7 +56,7 @@ boxplot_letters <- function(data, x, y, fill,
     ggplot(aes(x = reorder({{x}}, {{y}}, median), y = {{y}})) + #Instead of hard-coding a factor reorder, you can call it within the plotting function
     geom_box() +
     theme_article() + #Clean, minimal theme courtesy of the "egg" package
-    xlab(x.c) +
+    xlab(x.s) +
     geom_text(data = letters.df, aes(x = {{x}},
                                      y = .data$Placement.Value,
                                      label = .data$Letter),
@@ -76,4 +71,22 @@ boxplot_letters <- function(data, x, y, fill,
   } else if (raw == "jitter"){
     p + geom_jitter(col=pt_col, ...)
   } else p
+}
+
+#' Do Tukey Test and calculate letter placement
+#' @importFrom stats TukeyHSD aov as.formula median quantile reorder
+#' @noRd
+get_tukey_letters <- function(data, x, y){
+  # x <- deparse(substitute(x))
+  # y <- deparse(substitute(y))
+  form <- as.formula(paste(y, x, sep="~"))
+  letters.df <- data.frame("Letter" = multcompLetters(TukeyHSD(aov(form, data = data))[[x]][,4])$Letters)
+  letters.df[[x]] <- rownames(letters.df) #Create column based on rownames
+
+  placement <- data %>% #We want to create a dataframe to assign the letter position.
+    group_by(.data[[x]]) %>%
+    summarise(quantile(.data[[y]])[4])
+  colnames(placement)[2] <- "Placement.Value"
+  letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
+  letters.df
 }

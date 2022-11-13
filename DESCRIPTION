@@ -18,4 +18,5 @@ Imports:
     multcompView,
     purrr,
     rlang,
-    stats
+    stats,
+    tibble
