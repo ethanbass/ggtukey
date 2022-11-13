@@ -53,7 +53,7 @@ boxplot_letters <- function(data, x, y, fill, group,
   }
 
   p <- data %>% #Dataframe from which data will be drawn
-    ggplot(aes(x = reorder({{x}}, {{y}}, median), y = {{y}})) + #Instead of hard-coding a factor reorder, you can call it within the plotting function
+    ggplot(aes(x = {{x}}, y = {{y}})) + #Instead of hard-coding a factor reorder, you can call it within the plotting function
     geom_box() +
     theme_article() + #Clean, minimal theme courtesy of the "egg" package
     xlab(x.s) +
