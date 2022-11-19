@@ -41,6 +41,7 @@ Allows group variable for faceting
 Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots
 }
 \examples{
+set.seed(1)
 data <- data.frame("Category" = c(rep("Low", 10), rep("Medium", 10), rep("High", 10)),
                    "Value" = c(rnorm(10, 5), rnorm(10, 5.5), rnorm(10, 10)),
                    "Size" = c("Big","Small"))
