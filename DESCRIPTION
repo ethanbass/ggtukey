@@ -19,4 +19,5 @@ Imports:
     purrr,
     rlang,
     stats,
+    stringr,
     tibble
