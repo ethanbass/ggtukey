@@ -1,11 +1,11 @@
-Package: ggpubfigroutr
-Title: A collection of ggplot functions for publications
+Package: ggtukey
+Title: Add Tukey letters in 'ggplot2'
 Version: 0.0.1
 Authors@R: 
     person("Ethan", "Bass", , "ethanbass@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6175-6739"))
 Maintainer: Ethan Bass <ethanbass@gmail.com>
-Description: A collection of ggplot functions for publications.
+Description: Provides a simple interface to visualize paired comparisons in 'ggplot2' by add Tukey letters.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
