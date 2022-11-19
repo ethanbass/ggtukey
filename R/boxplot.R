@@ -21,8 +21,10 @@
 #' @note Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots
 #' @examples
 #' data <- data.frame("Category" = c(rep("Low", 10), rep("Medium", 10), rep("High", 10)),
-#'                         "Value" = c(rnorm(10, 5), rnorm(10, 5.5), rnorm(10, 10)))
+#'                    "Value" = c(rnorm(10, 5), rnorm(10, 5.5), rnorm(10, 10)),
+#'                    "Size" = c("Big","Small"))
 #' boxplot_letters(data, Category, Value)
+#' boxplot_letters(data, x=Category, y=Value, group=Size)
 #' @export
 
 boxplot_letters <- function(data, x, y, fill, group,
@@ -73,8 +75,9 @@ boxplot_letters <- function(data, x, y, fill, group,
 #' @noRd
 
 get_tukey_letters <- function(data, x, y){
-    form <- as.formula(paste(y, x, sep="~"))
-  letters.df <- data.frame("Letter" = multcompLetters(TukeyHSD(aov(form, data = data))[[x]][,4])$Letters)
+  form <- as.formula(paste(y, x, sep="~"))
+  tukey <-TukeyHSD(aov(form, data = data))[[x]][,4]
+  letters.df <- data.frame("Letter" = multcompLetters(tukey)$Letters)
   letters.df[[x]] <- rownames(letters.df) #Create column based on rownames
 
   placement <- data %>% #We want to create a dataframe to assign the letter position.
