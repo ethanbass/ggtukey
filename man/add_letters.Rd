@@ -4,7 +4,7 @@
 \alias{add_letters}
 \title{Add Tukey letters to existing ggplot object}
 \usage{
-add_letters(p, x, y, group)
+add_letters(p, x, y, group = NULL)
 }
 \arguments{
 \item{p}{A \code{ggplot} object}

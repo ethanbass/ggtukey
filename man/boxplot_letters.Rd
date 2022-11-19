@@ -35,7 +35,7 @@ boxplot_letters(
 according to the value of \code{raw}.}
 }
 \description{
-Create ggplot boxplot with Tukey HSD letters
+Allows group variable for faceting
 }
 \note{
 Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots

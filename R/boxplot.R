@@ -1,4 +1,6 @@
 #' Create ggplot boxplot with Tukey HSD letters
+#'
+#' Allows group variable for faceting
 #' @param data A data.frame in long format
 #' @param x variable to plot on x axis
 #' @param y variable to plot on y axis
@@ -24,8 +26,8 @@
 #' @export
 
 boxplot_letters <- function(data, x, y, fill, group,
-                            raw = c('none', 'points', 'dots', 'jitter'),
-                            pt_col = "slategray", ...){
+                             raw = c('none', 'points', 'dots', 'jitter'),
+                             pt_col = "slategray", ...){
 
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
 
@@ -36,15 +38,6 @@ boxplot_letters <- function(data, x, y, fill, group,
     stop("X and Y variables should be provided directly. Please do not use quotes!")
   }
 
-  # get tukey letters
-  if (missing(group)){
-    letters.df <- get_tukey_letters(data, x = x.s, y = y.s)
-  } else{
-  letters.df <- purrr::map_dfr(unique(data[[deparse(substitute(group))]]), function(gr){
-    data %>% filter({{group}} == gr) %>% get_tukey_letters(x = x.s, y = y.s) %>%
-      mutate({{group}} := gr) %>% tibble::remove_rownames()
-  })
-  }
   if (missing(fill)){
     geom_box <- purrr::partial(geom_boxplot, color = "black", alpha = 0)
   } else if (deparse(substitute(fill)) %in% colnames(data)){
@@ -57,21 +50,22 @@ boxplot_letters <- function(data, x, y, fill, group,
     ggplot(aes(x = {{x}}, y = {{y}})) +
     geom_box() +
     theme_article() + #Clean, minimal theme courtesy of the "egg" package
-    xlab(x.s) +
-    geom_text(data = letters.df, aes(x = {{x}},
-                                     y = .data$Placement.Value,
-                                     label = .data$Letter),
-              size = 4, color = "black",
-              hjust = -1.25,vjust = -0.8,
-              fontface = "bold")
+    xlab(x.s)
 
   if (raw == "points"){
-    p + geom_point(position = position_dodge(0.1), col = pt_col, ...)
+    p <- p + geom_point(position = position_dodge(0.1), col = pt_col, ...)
   } else if (raw == "dots"){
-    p + geom_dotplot(binaxis = 'y', stackdir = 'center', fill = pt_col, ...)
+    p <- p + geom_dotplot(binaxis = 'y', stackdir = 'center', fill = pt_col, ...)
   } else if (raw == "jitter"){
-    p + geom_jitter(col = pt_col, ...)
-  } else p
+    p <- p + geom_jitter(col = pt_col, ...)
+  }
+
+  if (!missing(group)){
+    p <- p + facet_wrap(vars({{group}}))
+    add_letters_facet(p, x={{x}}, y={{y}}, group={{group}})
+  } else{
+    add_letters_single(p,x={{x}},y={{y}})
+  }
 }
 
 #' Do Tukey Test and calculate letter placement
@@ -88,6 +82,71 @@ get_tukey_letters <- function(data, x, y){
     summarise("Placement.Value" = quantile(.data[[y]])[4])
   letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
   letters.df
+}
+
+#' Add Tukey letters to existing ggplot object
+#'
+#' @param p A \code{ggplot} object
+#' @param x variable to plot on x axis
+#' @param y variable to plot on y axis
+#' @param group grouping variable (to allow faceting)
+#' @import ggplot2
+#' @import dplyr
+#' @import multcompView
+#' @author Ethan Bass
+#' @export
+
+add_letters<- function(p, x, y, group=NULL){
+  x.s <- deparse(substitute(x))
+  y.s <- deparse(substitute(y))
+  data <- p$data
+  if (is.null(group)){
+    letters.df <- get_tukey_letters(data, x = x.s, y = y.s)
+  } else{
+  letters.df <- purrr::map_dfr(unique(data[[deparse(substitute(group))]]), function(gr){
+    data %>% filter({{group}} == gr) %>% get_tukey_letters(x = x.s, y = y.s) %>%
+      mutate({{group}} := gr) %>% tibble::remove_rownames()
+  })
+  }
+  p + geom_text(data = letters.df, aes(x = {{x}},
+                                     y = .data$Placement.Value,
+                                     label = .data$Letter),
+              size = 4, color = "black",
+              hjust = -1.25,vjust = -0.8,
+              fontface = "bold")
+}
+
+add_letters_facet <- function(p, x, y, group=NULL){
+  x.s <- gsub("~","",deparse(enquo(x)))
+  y.s <- gsub("~","",deparse(enquo(y)))
+  data <- p$data
+
+  letters.df <- purrr::map_dfr(unique(data[[gsub("~","",deparse(enquo(group)))]]), function(gr){
+    data %>% filter({{group}} == gr) %>% get_tukey_letters(x = x.s, y = y.s) %>%
+      mutate({{group}} := gr) %>% tibble::remove_rownames()
+  })
+
+  p + geom_text(data = letters.df, aes(x = {{x}},
+                                       y = .data$Placement.Value,
+                                       label = .data$Letter),
+                size = 4, color = "black",
+                hjust = -1.25,vjust = -0.8,
+                fontface = "bold")
+}
+
+add_letters_single <- function(p, x, y){
+  data <- p$data
+  x.s <- gsub("~","",deparse(enquo(x)))
+  y.s <- gsub("~","",deparse(enquo(y)))
+
+  letters.df <- get_tukey_letters(data, x = x.s, y = y.s)
+
+  p + geom_text(data = letters.df, aes(x = {{x}},
+                                       y = .data$Placement.Value,
+                                       label = .data$Letter),
+                size = 4, color = "black",
+                hjust = -1.25,vjust = -0.8,
+                fontface = "bold")
 }
 
 # get_tukey_letters_interaction <- function(data, x, y){
@@ -107,35 +166,3 @@ get_tukey_letters <- function(data, x, y){
 #   letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
 #   letters.df
 # }
-
-#' Add Tukey letters to existing ggplot object
-#'
-#' @param p A \code{ggplot} object
-#' @param x variable to plot on x axis
-#' @param y variable to plot on y axis
-#' @param group grouping variable (to allow faceting)
-#' @import ggplot2
-#' @import dplyr
-#' @import multcompView
-#' @author Ethan Bass
-#' @export
-
-add_letters<- function(p, x, y, group){
-  x.s <- deparse(substitute(x))
-  y.s <- deparse(substitute(y))
-  data <- p$data
-  if (missing(group)){
-    letters.df <- get_tukey_letters(data, x = x.s, y = y.s)
-  } else{
-  letters.df <- purrr::map_dfr(unique(data[[deparse(substitute(group))]]), function(gr){
-    data %>% filter({{group}} == gr) %>% get_tukey_letters(x = x.s, y = y.s) %>%
-      mutate({{group}} := gr) %>% tibble::remove_rownames()
-  })
-  }
-  p + geom_text(data = letters.df, aes(x = {{x}},
-                                     y = .data$Placement.Value,
-                                     label = .data$Letter),
-              size = 4, color = "black",
-              hjust = -1.25,vjust = -0.8,
-              fontface = "bold")
-}
