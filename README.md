@@ -3,7 +3,7 @@
   [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 <!-- badges: end -->
 
-Provides a simple interface to visualize paired comparisons by adding "Tukey" letters to ggplot figures.
+Provides a simple interface to visualize paired comparisons by adding [compact letter displays](https://en.wikipedia.org/wiki/Compact_letter_display) (i.e. "Tukey letters") to ggplot figures.
 
 # Example
 
