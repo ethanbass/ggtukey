@@ -21,24 +21,24 @@ boxplot_letters(
 )
 }
 \arguments{
-\item{data}{A data.frame in long format}
+\item{data}{A data.frame in "long" format.}
 
-\item{x}{variable to plot on x axis}
+\item{x}{variable to plot on x axis.}
 
-\item{y}{variable to plot on y axis}
+\item{y}{variable to plot on y axis.}
 
 \item{fill}{column or color to fill boxplots}
 
-\item{group}{grouping variable (to allow faceting)}
+\item{group}{A grouping variable (to allow faceting).}
 
 \item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
 
-\item{type}{Whether to run separate tests for each facet (\code{local}) or
-one (\code{global}) test with an interaction term between \code{x} and
-\code{group}. Defaults to \code{global}.}
+\item{type}{If a grouping variable is provided, determines whether to run
+separate tests for each facet (\code{local}) or one (\code{global}) test with
+an interaction term between \code{x} and \code{group}. Defaults to \code{global}.}
 
 \item{raw}{Whether to plot raw data and (if so), how. The current options are
-\code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
+\code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 \code{\link[ggplot2]{geom_jitter}}.}
 
 \item{pt_col}{Color of points, if raw data is plotted.}
@@ -53,8 +53,14 @@ according to the value of \code{raw}.}
 
 \item{lab_size}{Label size. Argument to \code{\link[ggplot2]{geom_text}}.}
 }
+\value{
+Returns the specified plot as a \code{ggplot} object.
+}
 \description{
-Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and
+Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and produces
+boxplots with compact letter display showing significance pairwise differences.
+Letters are produced by \code{\link[multcompView]{multcompLetters}}. Plots are
+produced by \code{\link[ggplot2]{ggplot2}}.
 }
 \details{
 Allows group variable for faceting

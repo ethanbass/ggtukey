@@ -1,19 +1,22 @@
 #' Create ggplot boxplot with compact letter display
 #'
-#' Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and
+#' Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and produces
+#' boxplots with compact letter display showing significance pairwise differences.
+#' Letters are produced by \code{\link[multcompView]{multcompLetters}}. Plots are
+#' produced by \code{\link[ggplot2]{ggplot2}}.
 #'
 #' Allows group variable for faceting
-#' @param data A data.frame in long format
-#' @param x variable to plot on x axis
-#' @param y variable to plot on y axis
+#' @param data A data.frame in "long" format.
+#' @param x variable to plot on x axis.
+#' @param y variable to plot on y axis.
 #' @param fill column or color to fill boxplots
-#' @param group grouping variable (to allow faceting)
+#' @param group A grouping variable (to allow faceting).
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
-#' @param type Whether to run separate tests for each facet (\code{local}) or
-#' one (\code{global}) test with an interaction term between \code{x} and
-#' \code{group}. Defaults to \code{global}.
+#' @param type If a grouping variable is provided, determines whether to run
+#' separate tests for each facet (\code{local}) or one (\code{global}) test with
+#' an interaction term between \code{x} and \code{group}. Defaults to \code{global}.
 #' @param raw Whether to plot raw data and (if so), how. The current options are
-#' \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
+#' \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 #' \code{\link[ggplot2]{geom_jitter}}.
 #' @param pt_col Color of points, if raw data is plotted.
 #' @param ... Additional arguments to \code{\link[ggplot2]{geom_point}},
@@ -30,6 +33,7 @@
 #' @import rlang
 #' @author Ethan Bass
 #' @note Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots
+#' @return Returns the specified plot as a \code{ggplot} object.
 #' @examples
 #' set.seed(1)
 #' data <- data.frame("Category" = c(rep("Low", 10), rep("Medium", 10), rep("High", 10)),
