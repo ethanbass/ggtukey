@@ -4,7 +4,7 @@
 \alias{add_letters}
 \title{Add Tukey letters to existing ggplot object}
 \usage{
-add_letters(p, x, y, group = NULL)
+add_letters(p, x, y, group = NULL, test = "tukey", type = c("global", "local"))
 }
 \arguments{
 \item{p}{A \code{ggplot} object}
@@ -14,6 +14,12 @@ add_letters(p, x, y, group = NULL)
 \item{y}{variable to plot on y axis}
 
 \item{group}{grouping variable (to allow faceting)}
+
+\item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
+
+\item{type}{Whether to run separate tests for each facet (\code{local}) or
+one (\code{global}) test with an interaction term between \code{x} and
+\code{group}. Defaults to \code{global}.}
 }
 \description{
 Add Tukey letters to existing ggplot object

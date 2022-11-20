@@ -10,6 +10,8 @@ boxplot_letters(
   y,
   fill,
   group,
+  test = "tukey",
+  type = c("global", "local"),
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
   ...
@@ -26,6 +28,12 @@ boxplot_letters(
 
 \item{group}{grouping variable (to allow faceting)}
 
+\item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
+
+\item{type}{Whether to run separate tests for each facet (\code{local}) or
+one (\code{global}) test with an interaction term between \code{x} and
+\code{group}. Defaults to \code{global}.}
+
 \item{raw}{whether to plot raw data and (if so) which format}
 
 \item{pt_col}{Color of points, if raw data is plotted.}
@@ -35,6 +43,9 @@ boxplot_letters(
 according to the value of \code{raw}.}
 }
 \description{
+Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and
+}
+\details{
 Allows group variable for faceting
 }
 \note{
