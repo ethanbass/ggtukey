@@ -1,4 +1,4 @@
-#' Create ggplot boxplot with Tukey HSD letters
+#' Create ggplot boxplot with compact letter display
 #'
 #' Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and
 #'
@@ -12,11 +12,16 @@
 #' @param type Whether to run separate tests for each facet (\code{local}) or
 #' one (\code{global}) test with an interaction term between \code{x} and
 #' \code{group}. Defaults to \code{global}.
-#' @param raw whether to plot raw data and (if so) which format
+#' @param raw Whether to plot raw data and (if so), how. The current options are
+#' \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
+#' \code{\link[ggplot2]{geom_jitter}}.
 #' @param pt_col Color of points, if raw data is plotted.
 #' @param ... Additional arguments to \code{\link[ggplot2]{geom_point}},
 #' \code{\link[ggplot2]{geom_dotplot}}, or \code{\link[ggplot2]{geom_jitter}},
 #' according to the value of \code{raw}.
+#' @param hjust Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param vjust Vertical adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param lab_size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @import dplyr
 #' @import egg
 #' @import multcompView
@@ -37,7 +42,8 @@
 boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
                             type=c("global", "local"),
                              raw = c('none', 'points', 'dots', 'jitter'),
-                             pt_col = "slategray", ...){
+                             pt_col = "slategray", ..., hjust=0, vjust=0,
+                            lab_size = 4){
 
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
   type <- match.arg(type, c("global","local"))
@@ -47,6 +53,7 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
   if (grepl('\"', x.s) | grepl('\"', y.s) | grepl('\"', deparse(substitute(group)))){
     stop("Variables should be provided directly. Please do not use quotes!")
   }
+  data <- mutate_at(data, vars({{x}}, {{group}}), as.factor)
 
   if (missing(fill)){
     geom_box <- purrr::partial(geom_boxplot, color = "black", alpha = 0)
@@ -73,9 +80,11 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
   if (!missing(group)){
     p <- p + facet_wrap(vars({{group}}))
     add_letters_facet(p, x = {{x}}, y = {{y}}, group = {{group}},
-                      test = test, type = type)
+                      test = test, type = type,
+                      hjust=hjust, vjust=vjust, lab_size = lab_size)
   } else{
-    add_letters_single(p, x={{x}}, y={{y}}, test=test)
+    add_letters_single(p, x={{x}}, y={{y}}, test = test,
+                       hjust=hjust, vjust=vjust, lab_size=lab_size)
   }
 }
 
@@ -97,17 +106,17 @@ get_tukey_letters <- function(data, x, y, test = "tukey"){
     xlab<-paste(x, collapse=":")
     data[,xlab] <- apply(data[,x], 1, paste, collapse = ":")
   }
-
-  tukey <-TukeyHSD(aov(form, data = data))[[xlab]][,4]
+  tukey <- TukeyHSD(aov(form, data = data))[[xlab]][,4]
+  tukey <- tukey[which(!is.na(tukey))]
   letters.df <- data.frame("Letter" = multcompLetters(tukey)$Letters)
   letters.df[[xlab]] <- rownames(letters.df) #Create column based on rownames
 
   placement <- data %>% #We want to create a dataframe to assign the letter position.
     group_by(.data[[xlab]]) %>%
     summarise("Placement.Value" = quantile(.data[[y]])[4])
-  letters.df <- suppressMessages(left_join(letters.df, placement)) # Merge dataframes
+  letters.df <- left_join(letters.df, placement, by = xlab) # Merge dataframes
   if (length(x) > 1){
-    letters.df <- left_join(letters.df, unique(data[,c(xlab, x)]))
+    letters.df <- left_join(letters.df, unique(data[,c(xlab, x)]), by = xlab)
   }
   letters.df
 }
@@ -162,13 +171,17 @@ add_letters<- function(p, x, y, group=NULL, test="tukey",
 #' @param type Whether to run separate tests for each facet (\code{local}) or
 #' one (\code{global}) test with an interaction term between \code{x} and
 #' \code{group}.
+#' @param hjust Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param vjust Vertical adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param lab_size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @import ggplot2
 #' @import dplyr
 #' @import multcompView
 #' @author Ethan Bass
 #' @noRd
 add_letters_facet <- function(p, x, y, group=NULL, test="tukey",
-                              type=c("global","local")){
+                              type=c("global","local"),
+                              hjust =0, vjust=0, lab_size = 4){
   x.s <- gsub("~","",deparse(enquo(x)))
   y.s <- gsub("~","",deparse(enquo(y)))
   g.s <- gsub("~","",deparse(enquo(group)))
@@ -187,8 +200,8 @@ add_letters_facet <- function(p, x, y, group=NULL, test="tukey",
   p + geom_text(data = letters.df, aes(x = {{x}},
                                        y = .data$Placement.Value,
                                        label = .data$Letter),
-                size = 4, color = "black",
-                hjust = -1.25,vjust = -0.8,
+                size = lab_size, color = "black",
+                hjust = hjust, vjust = vjust,
                 fontface = "bold")
 }
 
@@ -197,12 +210,16 @@ add_letters_facet <- function(p, x, y, group=NULL, test="tukey",
 #' @param y variable to plot on y axis
 #' @param group grouping variable (to allow faceting)
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
+#' @param hjust Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param vjust Vertical adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param lab_size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @import ggplot2
 #' @import dplyr
 #' @import multcompView
 #' @author Ethan Bass
 #' @noRd
-add_letters_single <- function(p, x, y, test="tukey"){
+add_letters_single <- function(p, x, y, test="tukey",
+                               hjust=0, vjust=0, lab_size=4){
   data <- p$data
   x.s <- gsub("~","",deparse(enquo(x)))
   y.s <- gsub("~","",deparse(enquo(y)))
@@ -213,7 +230,7 @@ add_letters_single <- function(p, x, y, test="tukey"){
   p + geom_text(data = letters.df, aes(x = {{x}},
                                        y = .data$Placement.Value,
                                        label = .data$Letter),
-                size = 4, color = "black",
-                hjust = -1.25,vjust = -0.8,
+                size = lab_size, color = "black",
+                hjust = hjust, vjust = vjust,
                 fontface = "bold")
 }

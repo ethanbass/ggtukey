@@ -2,7 +2,7 @@
 % Please edit documentation in R/boxplot.R
 \name{boxplot_letters}
 \alias{boxplot_letters}
-\title{Create ggplot boxplot with Tukey HSD letters}
+\title{Create ggplot boxplot with compact letter display}
 \usage{
 boxplot_letters(
   data,
@@ -14,7 +14,10 @@ boxplot_letters(
   type = c("global", "local"),
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
-  ...
+  ...,
+  hjust = 0,
+  vjust = 0,
+  lab_size = 4
 )
 }
 \arguments{
@@ -34,13 +37,21 @@ boxplot_letters(
 one (\code{global}) test with an interaction term between \code{x} and
 \code{group}. Defaults to \code{global}.}
 
-\item{raw}{whether to plot raw data and (if so) which format}
+\item{raw}{Whether to plot raw data and (if so), how. The current options are
+\code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
+\code{\link[ggplot2]{geom_jitter}}.}
 
 \item{pt_col}{Color of points, if raw data is plotted.}
 
 \item{...}{Additional arguments to \code{\link[ggplot2]{geom_point}},
 \code{\link[ggplot2]{geom_dotplot}}, or \code{\link[ggplot2]{geom_jitter}},
 according to the value of \code{raw}.}
+
+\item{hjust}{Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.}
+
+\item{vjust}{Vertical adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.}
+
+\item{lab_size}{Label size. Argument to \code{\link[ggplot2]{geom_text}}.}
 }
 \description{
 Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and
