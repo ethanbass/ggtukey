@@ -1,6 +1,6 @@
 Package: ggtukey
-Title: Add Tukey letters in 'ggplot2'
-Version: 0.0.1
+Title: Compact Letter Displays for 'ggplot2'
+Version: 0.1.0
 Authors@R: 
     person("Ethan", "Bass", , "ethanbass@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6175-6739"))
@@ -21,3 +21,7 @@ Imports:
     rlang,
     stats,
     tibble
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
