@@ -26,3 +26,4 @@ Suggests:
     rmarkdown,
     palmerpenguins
 VignetteBuilder: knitr
+URL: https://ethanbass.github.io/ggtukey/
