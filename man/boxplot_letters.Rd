@@ -12,12 +12,14 @@ boxplot_letters(
   group,
   test = "tukey",
   type = c("global", "local"),
+  where = c("box", "whisker"),
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
   ...,
   hjust = 0,
   vjust = 0,
-  lab_size = 4
+  lab_size = 4,
+  na.rm = TRUE
 )
 }
 \arguments{
@@ -37,6 +39,9 @@ boxplot_letters(
 separate tests for each facet (\code{local}) or one (\code{global}) test with
 an interaction term between \code{x} and \code{group}. Defaults to \code{global}.}
 
+\item{where}{Where to put the letters. Either above the box (\code{box}) or
+above the upper whisker (\code{whisker}).}
+
 \item{raw}{Whether to plot raw data and (if so), how. The current options are
 \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 \code{\link[ggplot2]{geom_jitter}}.}
@@ -52,6 +57,9 @@ according to the value of \code{raw}.}
 \item{vjust}{Vertical adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.}
 
 \item{lab_size}{Label size. Argument to \code{\link[ggplot2]{geom_text}}.}
+
+\item{na.rm}{Logical. Whether to remove observations with NAs for the provided
+factors (i.e. \code{x} and \code{group}) before plotting.}
 }
 \value{
 Returns the specified plot as a \code{ggplot} object.

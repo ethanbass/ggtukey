@@ -4,7 +4,15 @@
 \alias{add_letters}
 \title{Add Tukey letters to existing ggplot object}
 \usage{
-add_letters(p, x, y, group = NULL, test = "tukey", type = c("global", "local"))
+add_letters(
+  p,
+  x,
+  y,
+  group = NULL,
+  test = "tukey",
+  type = c("global", "local"),
+  where = c("box", "whisker")
+)
 }
 \arguments{
 \item{p}{A \code{ggplot} object}
@@ -20,6 +28,9 @@ add_letters(p, x, y, group = NULL, test = "tukey", type = c("global", "local"))
 \item{type}{Whether to run separate tests for each facet (\code{local}) or
 one (\code{global}) test with an interaction term between \code{x} and
 \code{group}. Defaults to \code{global}.}
+
+\item{where}{Where to put the letters. Either above the box (\code{box}) or
+above the upper whisker (\code{whisker}).}
 }
 \description{
 Add Tukey letters to existing ggplot object
