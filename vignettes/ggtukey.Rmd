@@ -20,29 +20,38 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(ggtukey)
 library(ggplot2)
-data(mpg)
+library(palmerpenguins)
+data(penguins)
 ```
 
 Simple boxplot with Tukey Letters:
 
 ```{r, fig.width=6}
-boxplot_letters(data=mpg, x=class, y=hwy,vjust=-0.5, hjust=-0.3, type="global")
+boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="global")
 ```
 
-Break it down by year:
+# Faceting
+
+Perhaps we want to break our penguin data by sex:
 
 ```{r}
-boxplot_letters(data=mpg, x=class, y=hwy, group=year, vjust=-0.5)
+boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, vjust=-0.5)
 ```
 
-Here there are two options that may give slightly different results. By default a `global` test is conducted where `TukeyHSD` is run on a full anova with class and year as interaction, returning all pairwise comparisons. If the comparisons are independent, `type="local"` can be selected to run independent Tukey tests on each group.
+Or look for sex differences within our three species:
 
 ```{r}
-boxplot_letters(data=mpg, x = class, y = hwy, group = year, type="local", vjust = -0.5)
+boxplot_letters(data=penguins, x=sex, y=body_mass_g, group=species, vjust=-0.5)
 ```
 
-Raw data can also be plotted in various ways using the `raw` argument to specify the desired geom for plotting raw data: i.e. `geom_point` (`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
+In these cases, there are two options for the statistics that may give different results. By default a `global` test is conducted where `TukeyHSD` is run on a full anova (\code{aov}) with class and year as interaction, returning all pairwise comparisons. If the comparisons are independent, `type="local"` can be selected to run independent Tukey tests within each group.
 
 ```{r}
-boxplot_letters(data=mpg, x = class, y = hwy, group = year, type="local", vjust = -0.5, raw = "jitter", alpha=0.6)
+boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, type="local", vjust=-0.5)
+```
+
+Raw data can also be plotted in various ways using the `raw` argument to specify the desired geom for plotting raw data: e.g. `geom_point` (`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
+
+```{r}
+boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust = -0.5, raw = "jitter", alpha=0.6)
 ```

@@ -23,5 +23,6 @@ Imports:
     tibble
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    palmerpenguins
 VignetteBuilder: knitr
