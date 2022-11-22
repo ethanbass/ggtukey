@@ -44,7 +44,7 @@ Or look for sex differences within our three species:
 boxplot_letters(data=penguins, x=sex, y=body_mass_g, group=species, vjust=-0.5)
 ```
 
-In these cases, there are two options for the statistics that may give different results. By default a `global` test is conducted where `TukeyHSD` is run on a full anova (\code{aov}) with class and year as interaction, returning all pairwise comparisons. If the comparisons are independent, `type="local"` can be selected to run independent Tukey tests within each group.
+When there is a grouping variable, there are (at least) two possible ways to run the statistics that may yield different results. By default a `global` test is conducted where `TukeyHSD` is run on a full anova ([aov](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov)) with class and year as interaction, returning all pairwise comparisons of these two factors. If the comparisons are independent, `type="local"` can be selected to run independent Tukey tests within each group.
 
 ```{r}
 boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, type="local", vjust=-0.5)
