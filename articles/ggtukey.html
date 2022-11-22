@@ -90,12 +90,14 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">sex</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, group<span class="op">=</span><span class="va">species</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-4-1.png" width="691.2"></p>
-<p>In these cases, there are two options for the statistics that may
-give different results. By default a <code>global</code> test is
-conducted where <code>TukeyHSD</code> is run on a full anova () with
-class and year as interaction, returning all pairwise comparisons. If
-the comparisons are independent, <code>type="local"</code> can be
-selected to run independent Tukey tests within each group.</p>
+<p>When there is a grouping variable, there are (at least) two possible
+ways to run the statistics that may yield different results. By default
+a <code>global</code> test is conducted where <code>TukeyHSD</code> is
+run on a full anova (<a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov" class="external-link">aov</a>)
+with class and year as interaction, returning all pairwise comparisons
+of these two factors. If the comparisons are independent,
+<code>type="local"</code> can be selected to run independent Tukey tests
+within each group.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, group<span class="op">=</span><span class="va">sex</span>, type<span class="op">=</span><span class="st">"local"</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-5-1.png" width="691.2"></p>
