@@ -20,7 +20,8 @@ Imports:
     purrr,
     rlang,
     stats,
-    tibble
+    tibble,
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,

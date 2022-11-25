@@ -110,8 +110,31 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
 #' above the upper whisker (\code{whisker}).
 #' @noRd
 
-get_tukey_letters <- function(data, x, y, test = "tukey", where=c("box","whisker")){
-  where <- match.arg(where, c("box","whisker"))
+get_tukey_letters <- function(data, x, y, group=NULL, test = "tukey",
+                              type = c("global", "local"),
+                              where=c("box", "whisker")){
+  where <- match.arg(where, c("box", "whisker"))
+  type <- match.arg(type, c("global", "local"))
+  if (inherits(x, "quosure") & is.null(group)){
+    letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = "tukey",
+                                      where = where)
+  } else{
+    if (type == "global"){
+      letters.df <- place_tukey_letters(data, sapply(x, as_name), as_name(y), test = "tukey",
+                                        where = where)
+    } else if (type == "local"){
+      letters.df <- purrr::map_dfr(unique(data[[as_name(group)]]), function(gr){
+        data %>% filter(!!group == gr) %>% place_tukey_letters(x = as_name(x), y = as_name(y),
+                                                               where = where) %>%
+          mutate(!!group := gr) %>% tibble::remove_rownames()
+      })
+    }
+  }
+  letters.df
+}
+
+place_tukey_letters <- function(data, x, y, test = "tukey",
+                                where = c("box","whisker")){
   if (length(x) == 1){
     form <- as.formula(paste(y, x, sep="~"))
     xlab <- x
@@ -164,7 +187,7 @@ add_letters<- function(p, x, y, group=NULL, test="tukey",
   y.s <- deparse(substitute(y))
   data <- p$data
   if (is.null(group)){
-    letters.df <- get_tukey_letters(data, x = x.s, y = y.s, where=where)
+    letters.df <- get_tukey_letters(data, x = x.s, y = y.s, where = where)
   } else{
     if (type == "local"){
       letters.df <- purrr::map_dfr(unique(data[[deparse(substitute(group))]]), function(gr){
@@ -250,7 +273,7 @@ add_letters_single <- function(p, x, y, test="tukey", where = c("box","whisker")
   y.s <- gsub("~","",deparse(enquo(y)))
   where <- match.arg(where, c("box","whisker"))
   if (test == "tukey"){
-    letters.df <- get_tukey_letters(data, x = x.s, y = y.s, where=where)
+    letters.df <- get_tukey_letters(data, x = x.s, y = y.s, where = where)
   }
   p + geom_text(data = letters.df, aes(x = {{x}},
                                        y = .data$Placement.Value,
@@ -273,3 +296,4 @@ get_whisker <- function(x){
   x <- x[x<=r]
   max(x, na.rm=TRUE)
 }
+
