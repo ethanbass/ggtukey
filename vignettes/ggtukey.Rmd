@@ -55,3 +55,15 @@ Raw data can also be plotted in various ways using the `raw` argument to specify
 ```{r}
 boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust = -0.5, raw = "jitter", alpha=0.6)
 ```
+
+The package also includes a `geom_tukey` function that can be used to construct compact letter displays.
+
+```{r}
+penguins |> tidyr::drop_na(sex, species) |> 
+  ggplot(aes(x=species, y=body_mass_g)) +
+  geom_boxplot() + geom_jitter(col="slategray", alpha=0.6) +
+  facet_wrap(~sex) +
+  geom_tukey(where="whisker") +
+  ylab("Body mass (g)") +
+  xlab("Species") + theme_classic()
+```
