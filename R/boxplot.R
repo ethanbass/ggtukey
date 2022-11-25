@@ -112,8 +112,8 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
 
 get_tukey_letters <- function(data, x, y, group=NULL, test = "tukey",
                               type = c("global", "local"),
-                              where=c("box", "whisker")){
-  where <- match.arg(where, c("box", "whisker"))
+                              where=c("box", "whisker", "mean", "median")){
+  where <- match.arg(where, c("box", "whisker", "mean","median"))
   type <- match.arg(type, c("global", "local"))
   if (inherits(x, "quosure") & is.null(group)){
     letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = "tukey",
@@ -150,7 +150,9 @@ place_tukey_letters <- function(data, x, y, test = "tukey",
 
   placement_fnc <- switch(where,
                           "box" = get_quantile,
-                          "whisker" = get_whisker)
+                          "whisker" = get_whisker,
+                          "mean" = mean,
+                          "median" = median)
   placement <- data %>% #We want to create a dataframe to assign the letter position.
     group_by(.data[[xlab]]) %>%
     summarise("Placement.Value" = placement_fnc(.data[[y]]))

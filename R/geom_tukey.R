@@ -11,6 +11,8 @@
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
 #' factors (i.e. \code{x} and \code{group}) before plotting.
 #' @author Ethan Bass
+#' @note Thank you to Hiroaki Yutani for a very helpful blog post describing the
+#' ggplot_add syntax (https://yutani.rbind.io/post/2017-11-07-ggplot-add/).
 #' @examples
 #' library(ggplot2)
 #' set.seed(1)
@@ -23,12 +25,12 @@
 
 
 geom_tukey <- function(test = "tukey",
-                       type=c("global", "local"), where = c("box","whisker"),
+                       type=c("global", "local"), where = c("box","whisker", "mean", "median"),
                        hjust=0, vjust=0, size = 4, na.rm = TRUE){
   # store inputs in classed output that can
   # be passed to a `ggplot_add` method
   type <- match.arg(type, c("global", "local"))
-  where <- match.arg(where,  c("box","whisker"))
+  where <- match.arg(where,  c("box","whisker", "mean", "median"))
   structure(
     "geom_tukey",
     class = "geom_tukey",
@@ -46,25 +48,25 @@ geom_tukey <- function(test = "tukey",
 #' @importFrom tidyr drop_na
 #' @noRd
 geom_tukey_ <- function(p, test = "tukey",
-                        type=c("global", "local"), where = c("box","whisker"),
+                        type=c("global", "local"), where = c("box","whisker", "mean","median"),
                         hjust=0, vjust=0, size = 4, na.rm = TRUE) {
   data <- p$data
   if (na.rm){
     data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
   }
   if (length(p$facet$params) == 0){
-    data <- get_tukey_letters(data, p$mapping$x, p$mapping$y, where = "whisker")
+    data <- get_tukey_letters(data, p$mapping$x, p$mapping$y, where = where)
   } else{
     if (type == "global"){
       data <- get_tukey_letters(data = data,
                                          x = c(p$mapping$x, p$facet$params$facets[[1]]),
-                                         y= p$mapping$y, where = "whisker", type = type)
+                                         y= p$mapping$y, where = where, type = type)
     } else if (type == "local"){
       data <- get_tukey_letters(data = data,
                                          x = p$mapping$x,
                                          y= p$mapping$y,
                                          group = p$facet$params$facets[[1]],
-                                         where = "whisker", type = type)
+                                         where = where, type = type)
     }
   }
   geom_text(data = data,
@@ -72,6 +74,7 @@ geom_tukey_ <- function(p, test = "tukey",
             vjust = vjust, size = size)
 }
 
+#' @name ggplot_add.geom_tukey
 #' @export
 #' @noRd
 ggplot_add.geom_tukey <- function(object, plot, object_name) {

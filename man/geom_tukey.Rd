@@ -7,7 +7,7 @@
 geom_tukey(
   test = "tukey",
   type = c("global", "local"),
-  where = c("box", "whisker"),
+  where = c("box", "whisker", "mean", "median"),
   hjust = 0,
   vjust = 0,
   size = 4,
@@ -35,6 +35,10 @@ factors (i.e. \code{x} and \code{group}) before plotting.}
 }
 \description{
 Tukey Geom
+}
+\note{
+Thank you to Hiroaki Yutani for a very helpful blog post describing the
+ggplot_add syntax (https://yutani.rbind.io/post/2017-11-07-ggplot-add/).
 }
 \examples{
 library(ggplot2)
