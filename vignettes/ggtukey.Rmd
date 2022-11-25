@@ -21,10 +21,11 @@ knitr::opts_chunk$set(
 library(ggtukey)
 library(ggplot2)
 library(palmerpenguins)
+library(Hmisc)
 data(penguins)
 ```
 
-# Geom 
+# Introduction to `geom_tukey` 
 
 The package includes a geom (`geom_tukey`) that can be used to easily overlay compact letter displays onto [ggplot2](https://ggplot2.tidyverse.org/) figures.
 
@@ -39,7 +40,7 @@ penguins |> tidyr::drop_na(sex, species) |>
   xlab("Species") + egg::theme_article()
 ```
 
-# Customization
+## Customization
 
 The geom includes several arguments that can be modified to choose the statistics that are done to generate the compact letter displays, as well as adjusting their position on the plot. The `test` argument determines what kind of statistical test is conducted, while the `type` argument controls whether statistics are done `globally` (e.g. with a two-way ANOVA) or `locally` (e.g. in separate one-way ANOVAs for each faceting variable). There are also several arguments that can be used to adjust the positioning of the letters, including `where` to choose the basic position of the labels. Finer adjustments can then be made using the `hjust` and `vjust` arguments to nudge the letters horizontally or vertically.
 
@@ -53,17 +54,17 @@ penguins |> tidyr::drop_na(sex, species) |>
   xlab("Species") + egg::theme_article()
 ```
 
-# Convenience function
+# Introduction to `boxplot_letters`
 
 The package also includes a convenience function `boxplot_letters` for quickly creating boxplots with compact letter displays using even simpler syntax.
 
-## Simple boxplot with Tukey Letters:
+## Creating a simple boxplot
 
 ```{r, fig.width=6}
 boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="global")
 ```
 
-## Multipanel plots
+## Creating multipanel plots
 
 `boxplot_letters` also supported faceting using the `group` argument. For example, we might want to break our penguin data down by sex:
 
@@ -90,3 +91,29 @@ boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust 
                 raw = "jitter", alpha=0.6)
 ```
 
+# Other types of plots
+
+## Dynamite plot
+
+To create a dynamite plot (which I do not advocate):
+
+```{r}
+data(iris)
+p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
+  geom_bar(aes(fill=Species), position = "dodge", stat = "summary", fun = "mean", width=0.6) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
+  geom_tukey(where="mean", vjust=-1.5)
+p
+```
+   
+## Dot plot
+
+```{r}
+data(iris)
+p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
+  geom_jitter(aes(color=Species, fill=Species), alpha=0.6, width=0.2) +
+  geom_point(aes(fill = Species), position = "dodge", stat = "summary", fun = "mean") +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
+  geom_tukey(where="mean", vjust=-1.5) + guides(fill = "none")
+p
+```
