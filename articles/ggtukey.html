@@ -175,8 +175,11 @@ data: e.g. <code>geom_point</code> (<code>points</code>),
 </div>
 </div>
 <div class="section level2">
-<h2 id="dynamite-plot">Dynamite plot<a class="anchor" aria-label="anchor" href="#dynamite-plot"></a>
+<h2 id="other-types-of-plots">Other types of plots<a class="anchor" aria-label="anchor" href="#other-types-of-plots"></a>
 </h2>
+<div class="section level3">
+<h3 id="dynamite-plot">Dynamite plot<a class="anchor" aria-label="anchor" href="#dynamite-plot"></a>
+</h3>
 <p>To create a dynamite plot (which I do not advocate):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
@@ -187,9 +190,9 @@ data: e.g. <code>geom_point</code> (<code>points</code>),
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-9-1.png" width="691.2"></p>
 </div>
-<div class="section level2">
-<h2 id="dot-plot">Dot plot<a class="anchor" aria-label="anchor" href="#dot-plot"></a>
-</h2>
+<div class="section level3">
+<h3 id="dot-plot">Dot plot<a class="anchor" aria-label="anchor" href="#dot-plot"></a>
+</h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span><span class="va">p</span><span class="op">&lt;-</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Species</span>, y<span class="op">=</span><span class="va">Petal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -201,6 +204,7 @@ data: e.g. <code>geom_point</code> (<code>points</code>),
 <span><span class="co">#&gt; Warning: Width not defined</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Set with `position_dodge(width = ...)`</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-10-1.png" width="691.2"></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
