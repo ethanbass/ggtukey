@@ -81,11 +81,25 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
     xlab(x.s)
 
   if (raw == "points"){
-    p <- p + geom_point(position = position_dodge(0.1), col = pt_col, ...)
+    if (deparse(substitute(pt_col)) %in% colnames(data)){
+      p <- p + geom_point(aes(col={{pt_col}}), position = position_dodge(0.1), ...)
+    } else if (is.color(pt_col)){
+      p <- p + geom_point(position = position_dodge(0.1), col = pt_col, ...)
+    }
   } else if (raw == "dots"){
-    p <- p + geom_dotplot(binaxis = 'y', stackdir = 'center', fill = pt_col, ...)
+    if (deparse(substitute(pt_col)) %in% colnames(data)){
+      p <- p + geom_dotplot(aes(fill={{pt_col}}),
+                            binaxis = 'y', stackdir = 'center', ...)
+    } else if (is.color(pt_col)){
+      p <- p + geom_dotplot(fill = pt_col,
+                            binaxis = 'y', stackdir = 'center', ...)
+    }
   } else if (raw == "jitter"){
-    p <- p + geom_jitter(col = pt_col, ...)
+    if (deparse(substitute(pt_col)) %in% colnames(data)){
+      p <- p + geom_jitter(aes(col = {{pt_col}}), ...)
+    } else if (is.color(pt_col)){
+      p <- p + geom_jitter(col = pt_col, ...)
+    }
   }
 
   if (!missing(group)){

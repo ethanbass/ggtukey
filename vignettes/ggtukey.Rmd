@@ -88,7 +88,7 @@ Raw data can also be plotted in various ways using the `raw` argument to specify
 
 ```{r}
 boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust = -0.5, hjust=-0.2, 
-                raw = "jitter", alpha=0.6)
+                raw = "jitter", alpha=0.6, pt_col=species)
 ```
 
 # Other types of plots

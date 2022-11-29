@@ -11,6 +11,14 @@
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
 #' factors (i.e. \code{x} and \code{group}) before plotting.
 #' @author Ethan Bass
+#' @references
+#' * Piepho, Hans-Peter (2004) "An Algorithm for a Letter-Based
+#' Representation of All-Pairwise Comparisons", Journal of Computational and
+#' Graphical Statistics, 13(2)456-466.
+#'
+#' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). _multcompView: Visualizations of Paired Comparisons_. R package
+#' version 0.1-8, (https://CRAN.R-project.org/package=multcompView).
+#'
 #' @note Thank you to Hiroaki Yutani for a very helpful blog post describing the
 #' ggplot_add syntax (https://yutani.rbind.io/post/2017-11-07-ggplot-add/).
 #' @examples
