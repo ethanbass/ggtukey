@@ -15,3 +15,9 @@ data <- data.frame("Category" = c(rep("Low", 10), rep("Medium", 10), rep("High",
                    "Size" = c("Big","Small"))
 boxplot_letters(data, x=Category, y=Value, group=Size)
 ```
+
+### Citation
+
+You can cite ggtukey as follows:
+
+Bass, E. (2022). ggtukey: Compact Letter Displays for 'ggplot2' (v0.1.0). (https://ethanbass.github.io/ggtukey/). 
