@@ -49,6 +49,15 @@ data <- data.frame("Category" = c(rep("Low", 10), rep("Medium", 10), rep("High",
 data |> ggplot(aes(x=Category, y=Value)) + geom_boxplot() + facet_wrap(~Size) + geom_tukey()
 data |> ggplot(aes(x=Size, y=Value)) + geom_boxplot() + facet_wrap(~Category) + geom_tukey()
 }
+\references{
+\itemize{
+\item Piepho, Hans-Peter (2004) "An Algorithm for a Letter-Based
+Representation of All-Pairwise Comparisons", Journal of Computational and
+Graphical Statistics, 13(2)456-466.
+\item Graves S, Piepho H, Dorai-Raj LSwhfS (2019). \emph{multcompView: Visualizations of Paired Comparisons}. R package
+version 0.1-8, (https://CRAN.R-project.org/package=multcompView).
+}
+}
 \author{
 Ethan Bass
 }
