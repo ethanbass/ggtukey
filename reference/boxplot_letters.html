@@ -69,7 +69,8 @@ produced by <code><a href="https://ggplot2.tidyverse.org/reference/ggplot2-packa
 <span>  hjust <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  vjust <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  lab_size <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">0.05</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -142,6 +143,10 @@ according to the value of <code>raw</code>.</p></dd>
 <dd><p>Logical. Whether to remove observations with NAs for the provided
 factors (i.e. <code>x</code> and <code>group</code>) before plotting.</p></dd>
 
+
+<dt>threshold</dt>
+<dd><p>Statistical threshold for significance. Defaults to 0.05.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -169,7 +174,6 @@ factors (i.e. <code>x</code> and <code>group</code>) before plotting.</p></dd>
 <span class="r-in"><span>                   <span class="st">"Value"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   <span class="st">"Size"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Big"</span>,<span class="st">"Small"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">boxplot_letters</span><span class="op">(</span><span class="va">data</span>, <span class="va">Category</span>, <span class="va">Value</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>is.na() applied to non-(list or vector) of type 'symbol'</span>
 <span class="r-plt img"><img src="boxplot_letters-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">boxplot_letters</span><span class="op">(</span><span class="va">data</span>, x<span class="op">=</span><span class="va">Category</span>, y<span class="op">=</span><span class="va">Value</span>, group<span class="op">=</span><span class="va">Size</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="boxplot_letters-2.png" alt="" width="700" height="433"></span>

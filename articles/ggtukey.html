@@ -133,9 +133,7 @@ letter displays using even simpler syntax.</p>
 <h3 id="creating-a-simple-boxplot">Creating a simple boxplot<a class="anchor" aria-label="anchor" href="#creating-a-simple-boxplot"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.3</span>, type<span class="op">=</span><span class="st">"global"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in is.na(~): is.na() applied to non-(list or vector) of type 'symbol'</span></span>
-<span><span class="co">#&gt; Warning: Removed 2 rows containing non-finite values (`stat_boxplot()`).</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.3</span>, type<span class="op">=</span><span class="st">"global"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 </div>
 <div class="section level3">
@@ -145,7 +143,8 @@ letter displays using even simpler syntax.</p>
 <code>group</code> argument. For example, we might want to break our
 penguin data down by sex:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, group<span class="op">=</span><span class="va">sex</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, group<span class="op">=</span><span class="va">sex</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, </span>
+<span>                hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-5-1.png" width="691.2"></p>
 <p>Or look for sex differences within each of our three penguin
 species:</p>
@@ -169,8 +168,7 @@ data: e.g. <code>geom_point</code> (<code>points</code>),
 <code>geom_dotplot</code> (<code>dots</code>), <code>geom_jitter</code>
 (<code>jitter</code>).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x <span class="op">=</span> <span class="va">species</span>, y <span class="op">=</span> <span class="va">body_mass_g</span>, group <span class="op">=</span> <span class="va">sex</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.2</span>, </span>
-<span>                raw <span class="op">=</span> <span class="st">"jitter"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, pt_col<span class="op">=</span><span class="va">species</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x <span class="op">=</span> <span class="va">species</span>, y <span class="op">=</span> <span class="va">body_mass_g</span>, group <span class="op">=</span> <span class="va">sex</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.2</span>, raw <span class="op">=</span> <span class="st">"jitter"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, pt_col<span class="op">=</span><span class="va">species</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-8-1.png" width="691.2"></p>
 </div>
 </div>
