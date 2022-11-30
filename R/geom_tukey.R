@@ -1,4 +1,5 @@
-#' Tukey Geom
+#' Compact Letter Display Geom
+#' Groups with at least one letter in common are not significantly different.
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{local}) or one (\code{global}) test with
@@ -10,6 +11,7 @@
 #' @param size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
 #' factors (i.e. \code{x} and \code{group}) before plotting.
+#' @param threshold Statistical threshold for significance. Defaults to 0.05.
 #' @author Ethan Bass
 #' @references
 #' * Piepho, Hans-Peter (2004) "An Algorithm for a Letter-Based
@@ -19,8 +21,12 @@
 #' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). _multcompView: Visualizations of Paired Comparisons_. R package
 #' version 0.1-8, (https://CRAN.R-project.org/package=multcompView).
 #'
-#' @note Thank you to Hiroaki Yutani for a very helpful blog post describing the
-#' ggplot_add syntax (https://yutani.rbind.io/post/2017-11-07-ggplot-add/).
+#' * Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.”
+#' Agronomy Journal 110, no. 2 (2018): 431–34. \doi{10.2134/agronj2017.10.0580}/
+#'
+#' @note Thank you to Hiroaki Yutani ((https://yutani.rbind.io/post/2017-11-07-ggplot-add/))
+#' and Simon P Couch (https://www.simonpcouch.com/blog/ggplot-pipe-plus/) for two
+#' very helpful blog posts describing the \code{\link[ggplot2]{ggplot_add}} syntax.
 #' @examples
 #' library(ggplot2)
 #' set.seed(1)
@@ -31,10 +37,9 @@
 #' data |> ggplot(aes(x=Size, y=Value)) + geom_boxplot() + facet_wrap(~Category) + geom_tukey()
 #' @export
 
-
 geom_tukey <- function(test = "tukey",
                        type=c("global", "local"), where = c("box","whisker", "mean", "median"),
-                       hjust=0, vjust=0, size = 4, na.rm = TRUE){
+                       hjust=0, vjust=0, size = 4, na.rm = TRUE, threshold = 0.05){
   # store inputs in classed output that can
   # be passed to a `ggplot_add` method
   type <- match.arg(type, c("global", "local"))
@@ -49,7 +54,8 @@ geom_tukey <- function(test = "tukey",
     hjust = hjust,
     vjust = vjust,
     size = size,
-    na.rm = na.rm
+    na.rm = na.rm,
+    threshold = threshold
   )
 }
 
@@ -57,7 +63,7 @@ geom_tukey <- function(test = "tukey",
 #' @noRd
 geom_tukey_ <- function(p, test = "tukey",
                         type=c("global", "local"), where = c("box","whisker", "mean","median"),
-                        hjust=0, vjust=0, size = 4, na.rm = TRUE) {
+                        hjust=0, vjust=0, size = 4, na.rm = TRUE, threshold = 0.05) {
   data <- p$data
   if (na.rm){
     data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
@@ -67,14 +73,15 @@ geom_tukey_ <- function(p, test = "tukey",
   } else{
     if (type == "global"){
       data <- get_tukey_letters(data = data,
-                                         x = c(p$mapping$x, p$facet$params$facets[[1]]),
-                                         y= p$mapping$y, where = where, type = type)
+                                x = c(p$mapping$x, p$facet$params$facets[[1]]),
+                                y= p$mapping$y, where = where,type = type,
+                                threshold = threshold)
     } else if (type == "local"){
       data <- get_tukey_letters(data = data,
-                                         x = p$mapping$x,
-                                         y= p$mapping$y,
-                                         group = p$facet$params$facets[[1]],
-                                         where = where, type = type)
+                                x = p$mapping$x, y= p$mapping$y,
+                                group = p$facet$params$facets[[1]],
+                                where = where, type = type,
+                                threshold = threshold)
     }
   }
   geom_text(data = data,
@@ -85,24 +92,19 @@ geom_tukey_ <- function(p, test = "tukey",
 #' @name ggplot_add.geom_tukey
 #' @export
 #' @noRd
+#' @note Adapted from (https://www.simonpcouch.com/blog/ggplot-pipe-plus/)
 ggplot_add.geom_tukey <- function(object, plot, object_name) {
-  # a method for the `+` operator for fancy_layer objects.
-  # - "object to add" (arguments to the RHS of the `+`)
-  # - plot is the existing plot (on the LHS of the `+`)
-  # - object_name is the unevaluated call on the RHS of the `+`
 
-  # extract the `fn` attribute from `fancy_layer` output
   fn <- attr(object, "fn")
 
-  # extract arguments `arg1` and `arg2` from `fancy_layer` output
-  fancy_args <- attributes(object)[!names(attributes(object)) %in%
+  tukey_args <- attributes(object)[!names(attributes(object)) %in%
                                      c("class", "fn")]
 
-  # call `fn` with the arguments `plot`, `arg1`, and `arg2`
   new_layer <- do.call(
     fn,
-    c(list(plot), fancy_args)
+    c(list(plot), tukey_args)
   )
+
   # return the new plot
   plot$layers <- append(plot$layers, new_layer)
   plot

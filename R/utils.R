@@ -1,3 +1,73 @@
+
+#' Do Tukey Test and calculate letter placement
+#' @importFrom stats TukeyHSD aov as.formula median quantile reorder
+#' @importFrom dplyr left_join
+#' @param data A data.frame in long format
+#' @param x Independent variable or vector of variables to plot on x axis
+#' @param y Response variable to plot on y axis
+#' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
+#' @param where Where to put the letters. Either above the box (\code{box}) or
+#' above the upper whisker (\code{whisker}).
+#' @param threshold Statistical threshold for significance. Defaults to 0.05.
+#' @noRd
+
+get_tukey_letters <- function(data, x, y, group=NULL, test = "tukey",
+                              type = c("global", "local"),
+                              where=c("box", "whisker", "mean", "median"),
+                              threshold = 0.05){
+  where <- match.arg(where, c("box", "whisker", "mean","median"))
+  type <- match.arg(type, c("global", "local"))
+  if (inherits(x, "quosure") & is.null(group)){
+    letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = "tukey",
+                                      where = where, threshold = threshold)
+  } else{
+    if (type == "global"){
+      letters.df <- place_tukey_letters(data, sapply(x, as_name), as_name(y), test = "tukey",
+                                        where = where, threshold = threshold)
+    } else if (type == "local"){
+      letters.df <- purrr::map_dfr(unique(data[[as_name(group)]]), function(gr){
+        data %>% filter(!!group == gr) %>%
+          place_tukey_letters(x = as_name(x), y = as_name(y),
+                              where = where, threshold = threshold) %>%
+          mutate(!!group := gr) %>% tibble::remove_rownames()
+      })
+    }
+  }
+  letters.df
+}
+
+#' @noRd
+place_tukey_letters <- function(data, x, y, test = "tukey",
+                                where = c("box","whisker"),
+                                threshold=0.05){
+  if (length(x) == 1){
+    form <- as.formula(paste(y, x, sep="~"))
+    xlab <- x
+  } else {
+    form <- as.formula(paste(y, paste(x, collapse="*"), sep="~"))
+    xlab<-paste(x, collapse=":")
+    data[,xlab] <- apply(data[,x], 1, paste, collapse = ":")
+  }
+  tukey <- TukeyHSD(aov(form, data = data))[[xlab]][,4]
+  tukey <- tukey[which(!is.na(tukey))]
+  letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
+  letters.df[[xlab]] <- rownames(letters.df) #Create column based on rownames
+
+  placement_fnc <- switch(where,
+                          "box" = get_quantile,
+                          "whisker" = get_whisker,
+                          "mean" = mean,
+                          "median" = median)
+  placement <- data %>% #We want to create a dataframe to assign the letter position.
+    group_by(.data[[xlab]]) %>%
+    summarise("Placement.Value" = placement_fnc(.data[[y]]))
+  letters.df <- left_join(letters.df, placement, by = xlab) # Merge dataframes
+  if (length(x) > 1){
+    letters.df <- left_join(letters.df, unique(data[,c(xlab, x)]), by = xlab)
+  }
+  letters.df
+}
+
 #' Check whether color specifications exists.
 #'
 #' @export
@@ -54,4 +124,18 @@ is.color <- function(x, return.colors = FALSE) {
     x[!y] <- NA
     return(x)
   }
+}
+
+#' @importFrom stats quantile
+#' @noRd
+get_quantile <- function(x){
+  quantile(x, na.rm=TRUE)[4]
+}
+
+#' @importFrom stats IQR
+#'@noRd
+get_whisker <- function(x){
+  r <- quantile(x, na.rm=TRUE)[4] + 1.5*IQR(x, na.rm=TRUE)
+  x <- x[x<=r]
+  max(x, na.rm=TRUE)
 }

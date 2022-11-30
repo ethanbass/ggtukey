@@ -19,7 +19,8 @@ boxplot_letters(
   hjust = 0,
   vjust = 0,
   lab_size = 4,
-  na.rm = TRUE
+  na.rm = TRUE,
+  threshold = 0.05
 )
 }
 \arguments{
@@ -60,6 +61,8 @@ according to the value of \code{raw}.}
 
 \item{na.rm}{Logical. Whether to remove observations with NAs for the provided
 factors (i.e. \code{x} and \code{group}) before plotting.}
+
+\item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
 }
 \value{
 Returns the specified plot as a \code{ggplot} object.

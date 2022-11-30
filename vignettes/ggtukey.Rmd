@@ -25,7 +25,7 @@ library(Hmisc)
 data(penguins)
 ```
 
-# Introduction to `geom_tukey` 
+# Introduction to `geom_tukey`
 
 The package includes a geom (`geom_tukey`) that can be used to easily overlay compact letter displays onto [ggplot2](https://ggplot2.tidyverse.org/) figures.
 
@@ -69,7 +69,8 @@ boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3,
 `boxplot_letters` also supported faceting using the `group` argument. For example, we might want to break our penguin data down by sex:
 
 ```{r}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, vjust=-0.5)
+boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, vjust=-0.5, 
+                hjust = -0.2)
 ```
 
 Or look for sex differences within each of our three penguin species:
@@ -87,8 +88,7 @@ boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, type="local"
 Raw data can also be plotted in various ways using the `raw` argument to specify the desired geom for plotting raw data: e.g. `geom_point` (`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
 
 ```{r}
-boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust = -0.5, hjust=-0.2, 
-                raw = "jitter", alpha=0.6, pt_col=species)
+boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust = -0.5, hjust=-0.2, raw = "jitter", alpha=0.6, pt_col=species)
 ```
 
 # Other types of plots
@@ -105,7 +105,7 @@ p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
   geom_tukey(where="mean", vjust=-1.5)
 p
 ```
-   
+
 ## Dot plot
 
 ```{r}

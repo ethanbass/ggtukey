@@ -2,7 +2,6 @@
 
 S3method(ggplot_add,geom_tukey)
 export("%>%")
-export(add_letters)
 export(boxplot_letters)
 export(geom_tukey)
 export(is.color)

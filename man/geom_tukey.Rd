@@ -2,7 +2,8 @@
 % Please edit documentation in R/geom_tukey.R
 \name{geom_tukey}
 \alias{geom_tukey}
-\title{Tukey Geom}
+\title{Compact Letter Display Geom
+Groups with at least one letter in common are not significantly different.}
 \usage{
 geom_tukey(
   test = "tukey",
@@ -11,7 +12,8 @@ geom_tukey(
   hjust = 0,
   vjust = 0,
   size = 4,
-  na.rm = TRUE
+  na.rm = TRUE,
+  threshold = 0.05
 )
 }
 \arguments{
@@ -32,13 +34,17 @@ above the upper whisker (\code{whisker}).}
 
 \item{na.rm}{Logical. Whether to remove observations with NAs for the provided
 factors (i.e. \code{x} and \code{group}) before plotting.}
+
+\item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
 }
 \description{
-Tukey Geom
+Compact Letter Display Geom
+Groups with at least one letter in common are not significantly different.
 }
 \note{
-Thank you to Hiroaki Yutani for a very helpful blog post describing the
-ggplot_add syntax (https://yutani.rbind.io/post/2017-11-07-ggplot-add/).
+Thank you to Hiroaki Yutani ((https://yutani.rbind.io/post/2017-11-07-ggplot-add/))
+and Simon P Couch (https://www.simonpcouch.com/blog/ggplot-pipe-plus/) for two
+very helpful blog posts describing the \code{\link[ggplot2]{ggplot_add}} syntax.
 }
 \examples{
 library(ggplot2)
@@ -56,6 +62,8 @@ Representation of All-Pairwise Comparisons", Journal of Computational and
 Graphical Statistics, 13(2)456-466.
 \item Graves S, Piepho H, Dorai-Raj LSwhfS (2019). \emph{multcompView: Visualizations of Paired Comparisons}. R package
 version 0.1-8, (https://CRAN.R-project.org/package=multcompView).
+\item Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.”
+Agronomy Journal 110, no. 2 (2018): 431–34. \doi{10.2134/agronj2017.10.0580}/
 }
 }
 \author{
