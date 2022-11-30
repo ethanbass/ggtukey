@@ -100,7 +100,7 @@ To create a dynamite plot (which I do not advocate):
 ```{r}
 data(iris)
 p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
-  geom_bar(aes(fill=Species), position = "dodge", stat = "summary", fun = "mean", width=0.6) +
+  geom_bar(aes(fill=Species), position = "identity", stat = "summary", fun = "mean", width=0.6) +
   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
   geom_tukey(where="mean", vjust=-1.5)
 p
@@ -111,8 +111,8 @@ p
 ```{r}
 data(iris)
 p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
-  geom_jitter(aes(color=Species, fill=Species), alpha=0.6, width=0.2) +
-  geom_point(aes(fill = Species), position = "dodge", stat = "summary", fun = "mean") +
+  geom_jitter(aes(color=Species, fill=Species), alpha=0.6, width=0.15) +
+  geom_point(aes(fill = Species), position = "identity", stat = "summary", fun = "mean") +
   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
   geom_tukey(where="mean", vjust=-1.5) + guides(fill = "none")
 p

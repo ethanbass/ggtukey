@@ -1,4 +1,4 @@
-#' Compact Letter Display Geom
+#' Create Compact Letter Display Layer
 #' Groups with at least one letter in common are not significantly different.
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
 #' @param type If a grouping variable is provided, determines whether to run

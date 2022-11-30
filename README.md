@@ -3,7 +3,9 @@
   [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 <!-- badges: end -->
 
-`ggtukey` provides a simple interface to visualize paired comparisons by adding [compact letter displays](https://en.wikipedia.org/wiki/Compact_letter_display) (i.e. "Tukey letters") to 'ggplot2' figures.
+# Introduction
+
+This package provides a simple way to visualize paired comparisons by adding [compact letter displays](https://en.wikipedia.org/wiki/Compact_letter_display) (i.e. "Tukey letters") to 'ggplot2' figures.
 
 # Usage
 
@@ -21,3 +23,7 @@ boxplot_letters(data, x=Category, y=Value, group=Size)
 You can cite ggtukey as follows:
 
 Bass, E. (2022). ggtukey: Compact Letter Displays for 'ggplot2' (v0.1.0). (https://ethanbass.github.io/ggtukey/). 
+
+# References
+
+

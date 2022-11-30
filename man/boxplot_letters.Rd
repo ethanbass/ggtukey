@@ -68,10 +68,11 @@ factors (i.e. \code{x} and \code{group}) before plotting.}
 Returns the specified plot as a \code{ggplot} object.
 }
 \description{
-Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and produces
+Performs pairwise comparisons using \code{\link[stats]{TukeyHSD}} and produces
 boxplots with compact letter display showing significance pairwise differences.
 Letters are produced by \code{\link[multcompView]{multcompLetters}}. Plots are
-produced by \code{\link[ggplot2]{ggplot2}}.
+produced by \code{\link[ggplot2]{ggplot2}}. Raw data can also be overlaid in
+various ways according to the value of \code{raw}.
 }
 \details{
 Allows group variable for faceting

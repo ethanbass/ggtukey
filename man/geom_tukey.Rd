@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom_tukey.R
 \name{geom_tukey}
 \alias{geom_tukey}
-\title{Compact Letter Display Geom
+\title{Create Compact Letter Display Layer
 Groups with at least one letter in common are not significantly different.}
 \usage{
 geom_tukey(
@@ -38,7 +38,7 @@ factors (i.e. \code{x} and \code{group}) before plotting.}
 \item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
 }
 \description{
-Compact Letter Display Geom
+Create Compact Letter Display Layer
 Groups with at least one letter in common are not significantly different.
 }
 \note{

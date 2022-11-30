@@ -1,9 +1,10 @@
 #' Create ggplot boxplot with compact letter display
 #'
-#' Does pairwise comparison using \code{\link[stats]{TukeyHSD}} and produces
+#' Performs pairwise comparisons using \code{\link[stats]{TukeyHSD}} and produces
 #' boxplots with compact letter display showing significance pairwise differences.
 #' Letters are produced by \code{\link[multcompView]{multcompLetters}}. Plots are
-#' produced by \code{\link[ggplot2]{ggplot2}}.
+#' produced by \code{\link[ggplot2]{ggplot2}}. Raw data can also be overlaid in
+#' various ways according to the value of \code{raw}.
 #'
 #' Allows group variable for faceting
 #' @param data A data.frame in "long" format.
@@ -86,9 +87,9 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
 
   if (raw == "points"){
     if (deparse(substitute(pt_col)) %in% colnames(data)){
-      p <- p + geom_point(aes(col={{pt_col}}), position = position_dodge(0.1), ...)
+      p <- p + geom_point(aes(col={{pt_col}}), position = position_dodge(width = 0.1), ...)
     } else if (is.color(pt_col)){
-      p <- p + geom_point(position = position_dodge(0.1), col = pt_col, ...)
+      p <- p + geom_point(position = position_dodge(width = 0.1), col = pt_col, ...)
     }
   } else if (raw == "dots"){
     if (deparse(substitute(pt_col)) %in% colnames(data)){
@@ -112,3 +113,5 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
                  hjust = hjust, vjust = vjust, size = lab_size,
                  threshold = threshold)
 }
+
+
