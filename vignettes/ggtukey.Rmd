@@ -27,7 +27,7 @@ data(penguins)
 
 # Introduction to `geom_tukey`
 
-The package includes a geom (`geom_tukey`) that can be used to easily overlay compact letter displays onto [ggplot2](https://ggplot2.tidyverse.org/) figures.
+The package includes a geom (`geom_tukey`) that can be used to easily overlay [compact letter displays](https://en.wikipedia.org/wiki/Compact_letter_display) onto [ggplot2](https://ggplot2.tidyverse.org/) figures.
 
 ```{r}
 penguins |> tidyr::drop_na(sex, species) |> 
@@ -117,3 +117,11 @@ p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
   geom_tukey(where="mean", vjust=-1.5) + guides(fill = "none")
 p
 ```
+
+# References
+
+Piepho, Hans-Peter. \"An Algorithm for a Letter-Based Representation of All-Pairwise Comparisons.\" *Journal of Computational and Graphical Statistics* 13, no. 2 (June 1, 2004): 456--66. <https://doi.org/10.1198/1061860043515>.
+
+Piepho, Hans-Peter. \"Letters in Mean Comparisons: What They Do and Don\'t Mean.\" *Agronomy Journal* 110, no. 2 (2018): 431--34. <https://doi.org/10.2134/agronj2017.10.0580>.
+
+Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations of Paired Comparisons. R package version 0.1-8, ([https://CRAN.R-project.org/package=multcompView).](https://CRAN.R-project.org/package=multcompView).)

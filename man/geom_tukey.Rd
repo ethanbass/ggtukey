@@ -42,9 +42,10 @@ Create Compact Letter Display Layer
 Groups with at least one letter in common are not significantly different.
 }
 \note{
-Thank you to Hiroaki Yutani ((https://yutani.rbind.io/post/2017-11-07-ggplot-add/))
-and Simon P Couch (https://www.simonpcouch.com/blog/ggplot-pipe-plus/) for two
-very helpful blog posts describing the \code{\link[ggplot2]{ggplot_add}} syntax.
+Thank you to Hiroaki Yutani (\url{https://yutani.rbind.io/post/2017-11-07-ggplot-add/})
+and Simon P Couch (\url{https://www.simonpcouch.com/blog/ggplot-pipe-plus/})
+for a couple of very helpful blog posts describing the \code{\link[ggplot2]{ggplot_add}}
+syntax.
 }
 \examples{
 library(ggplot2)
@@ -57,14 +58,15 @@ data |> ggplot(aes(x=Size, y=Value)) + geom_boxplot() + facet_wrap(~Category) + 
 }
 \references{
 \itemize{
-\item Piepho, Hans-Peter (2004) "An Algorithm for a Letter-Based
-Representation of All-Pairwise Comparisons", Journal of Computational and
-Graphical Statistics, 13(2)456-466.
-\item Graves S, Piepho H, Dorai-Raj LSwhfS (2019). \emph{multcompView: Visualizations of Paired Comparisons}. R package
-version 0.1-8, (https://CRAN.R-project.org/package=multcompView).
+\item Piepho, Hans-Peter. An Algorithm for a Letter-Based Representation of
+All-Pairwise Comparisons. Journal of Computational and Graphical Statistics
+13, no. 2 (June 1, 2004): 456–66. \doi{10.1198/1061860043515}.
 \item Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.”
-Agronomy Journal 110, no. 2 (2018): 431–34. \doi{10.2134/agronj2017.10.0580}/
+Agronomy Journal 110, no. 2 (2018): 431–34. \doi{10.2134/agronj2017.10.0580}
 }
+
+#' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations
+of Paired Comparisons. R package version 0.1-8. \url{https://CRAN.R-project.org/package=multcompView}
 }
 \author{
 Ethan Bass
