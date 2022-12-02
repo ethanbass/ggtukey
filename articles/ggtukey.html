@@ -86,7 +86,8 @@
 <h2 id="introduction-to-geom_tukey">Introduction to <code>geom_tukey</code><a class="anchor" aria-label="anchor" href="#introduction-to-geom_tukey"></a>
 </h2>
 <p>The package includes a geom (<code>geom_tukey</code>) that can be
-used to easily overlay compact letter displays onto <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> figures.</p>
+used to easily overlay <a href="https://en.wikipedia.org/wiki/Compact_letter_display" class="external-link">compact
+letter displays</a> onto <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> figures.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -201,6 +202,17 @@ data: e.g. <code>geom_point</code> (<code>points</code>),
 <span><span class="va">p</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-10-1.png" width="691.2"></p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Piepho, Hans-Peter. "An Algorithm for a Letter-Based Representation
+of All-Pairwise Comparisons." <em>Journal of Computational and Graphical
+Statistics</em> 13, no. 2 (June 1, 2004): 456–66. <a href="https://doi.org/10.1198/1061860043515" class="external-link uri">https://doi.org/10.1198/1061860043515</a>.</p>
+<p>Piepho, Hans-Peter. "Letters in Mean Comparisons: What They Do and
+Don't Mean." <em>Agronomy Journal</em> 110, no. 2 (2018): 431–34. <a href="https://doi.org/10.2134/agronj2017.10.0580" class="external-link uri">https://doi.org/10.2134/agronj2017.10.0580</a>.</p>
+<p>Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView:
+Visualizations of Paired Comparisons. R package version 0.1-8, (<a href="https://CRAN.R-project.org/package=multcompView" class="external-link">https://CRAN.R-project.org/package=multcompView).</a>.)</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

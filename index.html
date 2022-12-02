@@ -67,23 +67,44 @@
 <p>This package provides a simple way to visualize paired comparisons by adding <a href="https://en.wikipedia.org/wiki/Compact_letter_display" class="external-link">compact letter displays</a> (i.e. “Tukey letters”) to ‘ggplot2’ figures.</p>
 </div>
 <div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
+<p>It is currently recommended to install <code>ggtukey</code> from GitHub:</p>
+<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"https://github.com/ethanbass/ggtukey/"</span><span class="op">)</span></span></code></pre>
+<p>or from <a href="https://ethanbass.r-universe.dev/" class="external-link">R Universe</a>:</p>
+<pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggtukey"</span>, repos<span class="op">=</span><span class="st">"https://ethanbass.r-universe.dev/"</span>, type<span class="op">=</span><span class="st">"source"</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level1">
 <h1 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h1>
-<p><code>ggtukey</code> provides a new geom (<code>geom_tukey</code>) for overlaying compact letter displays (CLDs) on ggplot figures as well as a convenience function (<code>boxplot_letters</code>) for quickly creating figures. A brief example of the syntax is reproduced below. See the <a href="https://ethanbass.github.io/ggtukey/articles/ggtukey.html">vignette</a> for more examples on how to use the package.</p>
-<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">"Category"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Medium"</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"High"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
+<p><code>ggtukey</code> provides a new geom (<code>geom_tukey</code>) for overlaying compact letter displays (CLDs) on ggplot figures.</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ethanbass.github.io/ggtukey/">ggtukey</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="st">"Category"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Medium"</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"High"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                   <span class="st">"Value"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                   <span class="st">"Size"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Big"</span>,<span class="st">"Small"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span><span class="va">data</span>, x<span class="op">=</span><span class="va">Category</span>, y<span class="op">=</span><span class="va">Value</span>, group<span class="op">=</span><span class="va">Size</span><span class="op">)</span></span></code></pre>
+<span>                   </span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Category</span>,y<span class="op">=</span><span class="va">Value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Size</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_tukey.html">geom_tukey</a></span><span class="op">(</span>hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.2</span>,vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.2</span><span class="op">)</span></span></code></pre>
+<p>There is also a convenience function (<code>boxplot_letters</code>) for quickly producing these types of figures as shown below.</p>
+<pre><code><span><span class="fu"><a href="reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span><span class="va">data</span>, x<span class="op">=</span><span class="va">Category</span>, y<span class="op">=</span><span class="va">Value</span>, group<span class="op">=</span><span class="va">Size</span><span class="op">)</span></span></code></pre>
+<p>For more examples and details on different options for customization, please consult the package <a href="https://ethanbass.github.io/ggtukey/reference/index.html">documentation</a> and <a href="https://ethanbass.github.io/ggtukey/articles/ggtukey.html">vignette</a>.</p>
 <div class="section level3">
 <h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h3>
-<p>You can cite ggtukey as follows:</p>
+<p>You can cite <code>ggtukey</code> as follows:</p>
 <p>Bass, E. (2022). ggtukey: Compact Letter Displays for ‘ggplot2’ (v0.1.0). (<a href="https://ethanbass.github.io/ggtukey/" class="uri">https://ethanbass.github.io/ggtukey/</a>).</p>
 </div>
 </div>
 <div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h1 id="further-reading">Further Reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h1>
+<p>Piepho, Hans-Peter. An Algorithm for a Letter-Based Representation of All-Pairwise Comparisons. Journal of Computational and Graphical Statistics 13, no. 2 (June 1, 2004): 456–66. <a href="https://doi.org/10.1198/1061860043515" class="external-link uri">https://doi.org/10.1198/1061860043515</a>.</p>
+<p>Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.” Agronomy Journal 110, no. 2 (2018): 431–34. <a href="https://doi.org/10.2134/agronj2017.10.0580" class="external-link uri">https://doi.org/10.2134/agronj2017.10.0580</a></p>
+<p>Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations of Paired Comparisons. R package version 0.1-8. <a href="https://CRAN.R-project.org/package=multcompView" class="external-link uri">https://CRAN.R-project.org/package=multcompView</a></p>
 </div>
 
   </main><aside class="col-md-3"><div class="license">
