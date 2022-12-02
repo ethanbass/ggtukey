@@ -60,7 +60,7 @@ Bass, E. (2022). ggtukey: Compact Letter Displays for 'ggplot2' (v0.1.0). (https
 
 Piepho, Hans-Peter. An Algorithm for a Letter-Based Representation of All-Pairwise Comparisons. Journal of Computational and Graphical Statistics 13, no. 2 (June 1, 2004): 456–66. https://doi.org/10.1198/1061860043515.
 
-Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.” Agronomy Journal 110, no. 2 (2018): 431–34.  https://doi.org/10.2134/agronj2017.10.0580
+Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.” Agronomy Journal 110, no. 2 (2018): 431–34.  https://doi.org/10.2134/agronj2017.10.0580.
 
-Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations of Paired Comparisons. R package version 0.1-8. https://CRAN.R-project.org/package=multcompView
+Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations of Paired Comparisons. R package version 0.1-8. https://CRAN.R-project.org/package=multcompView.
 
