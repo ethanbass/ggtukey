@@ -106,13 +106,13 @@ the statistics that are done to generate the compact letter displays, as
 well as adjusting their position on the plot. The <code>test</code>
 argument determines what kind of statistical test is conducted, while
 the <code>type</code> argument controls whether statistics are done
-<code>globally</code> (e.g. with a two-way ANOVA) or
-<code>locally</code> (e.g. in separate one-way ANOVAs for each faceting
-variable). There are also several arguments that can be used to adjust
-the positioning of the letters, including <code>where</code> to choose
-the basic position of the labels. Finer adjustments can then be made
-using the <code>hjust</code> and <code>vjust</code> arguments to nudge
-the letters horizontally or vertically.</p>
+<code>two-wayly</code> (e.g. with a two-way ANOVA) or
+<code>one-wayly</code> (e.g. in separate one-way ANOVAs for each
+faceting variable). There are also several arguments that can be used to
+adjust the positioning of the letters, including <code>where</code> to
+choose the basic position of the labels. Finer adjustments can then be
+made using the <code>hjust</code> and <code>vjust</code> arguments to
+nudge the letters horizontally or vertically.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">penguins</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">species</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -134,7 +134,7 @@ letter displays using even simpler syntax.</p>
 <h3 id="creating-a-simple-boxplot">Creating a simple boxplot<a class="anchor" aria-label="anchor" href="#creating-a-simple-boxplot"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.3</span>, type<span class="op">=</span><span class="st">"global"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.3</span>, type<span class="op">=</span><span class="st">"two-way"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 </div>
 <div class="section level3">
@@ -154,14 +154,14 @@ species:</p>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-6-1.png" width="691.2"></p>
 <p>When there is a grouping variable, there are (at least) two possible
 ways to run the statistics that may yield different results. By default
-a <code>global</code> test is conducted where <code>TukeyHSD</code> is
+a <code>two-way</code> test is conducted where <code>TukeyHSD</code> is
 run on a full ANOVA (<a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov" class="external-link">aov</a>)
 with species and sex as an interaction, returning all pairwise
 comparisons of these two factors. If the comparisons are independent,
-<code>type="local"</code> can be selected to run independent Tukey tests
-within each group.</p>
+<code>type="one-way"</code> can be selected to run independent Tukey
+tests within each group.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, group<span class="op">=</span><span class="va">sex</span>, type<span class="op">=</span><span class="st">"local"</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/boxplot_letters.html">boxplot_letters</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">penguins</span>, x<span class="op">=</span><span class="va">species</span>, y<span class="op">=</span><span class="va">body_mass_g</span>, group<span class="op">=</span><span class="va">sex</span>, type<span class="op">=</span><span class="st">"one-way"</span>, vjust<span class="op">=</span><span class="op">-</span><span class="fl">0.5</span>, hjust<span class="op">=</span><span class="op">-</span><span class="fl">0.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggtukey_files/figure-html/unnamed-chunk-7-1.png" width="691.2"></p>
 <p>Raw data can also be plotted in various ways using the
 <code>raw</code> argument to specify the desired geom for plotting raw
@@ -206,11 +206,11 @@ data: e.g. <code>geom_point</code> (<code>points</code>),
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p>Piepho, Hans-Peter. "An Algorithm for a Letter-Based Representation
-of All-Pairwise Comparisons." <em>Journal of Computational and Graphical
+<p>Piepho, Hans-Peter. “An Algorithm for a Letter-Based Representation
+of All-Pairwise Comparisons.” <em>Journal of Computational and Graphical
 Statistics</em> 13, no. 2 (June 1, 2004): 456–66. <a href="https://doi.org/10.1198/1061860043515" class="external-link uri">https://doi.org/10.1198/1061860043515</a>.</p>
-<p>Piepho, Hans-Peter. "Letters in Mean Comparisons: What They Do and
-Don't Mean." <em>Agronomy Journal</em> 110, no. 2 (2018): 431–34. <a href="https://doi.org/10.2134/agronj2017.10.0580" class="external-link uri">https://doi.org/10.2134/agronj2017.10.0580</a>.</p>
+<p>Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and
+Don’t Mean.” <em>Agronomy Journal</em> 110, no. 2 (2018): 431–34. <a href="https://doi.org/10.2134/agronj2017.10.0580" class="external-link uri">https://doi.org/10.2134/agronj2017.10.0580</a>.</p>
 <p>Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView:
 Visualizations of Paired Comparisons. R package version 0.1-8, (<a href="https://CRAN.R-project.org/package=multcompView" class="external-link">https://CRAN.R-project.org/package=multcompView).</a>.)</p>
 </div>
