@@ -6,22 +6,24 @@
 Groups with at least one letter in common are not significantly different.}
 \usage{
 geom_tukey(
-  test = "tukey",
-  type = c("global", "local"),
+  test = c("tukey", "kruskalmc"),
+  threshold = 0.05,
+  type = c("two-way", "one-way"),
   where = c("box", "whisker", "mean", "median"),
   hjust = 0,
   vjust = 0,
   size = 4,
-  na.rm = TRUE,
-  threshold = 0.05
+  na.rm = TRUE
 )
 }
 \arguments{
 \item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
 
+\item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
+
 \item{type}{If a grouping variable is provided, determines whether to run
-separate tests for each facet (\code{local}) or one (\code{global}) test with
-an interaction term between \code{x} and \code{group}. Defaults to \code{global}.}
+separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
+an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.}
 
 \item{where}{Where to put the letters. Either above the box (\code{box}) or
 above the upper whisker (\code{whisker}).}
@@ -34,8 +36,6 @@ above the upper whisker (\code{whisker}).}
 
 \item{na.rm}{Logical. Whether to remove observations with NAs for the provided
 factors (i.e. \code{x} and \code{group}) before plotting.}
-
-\item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
 }
 \description{
 Create Compact Letter Display Layer

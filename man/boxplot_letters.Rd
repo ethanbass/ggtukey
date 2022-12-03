@@ -11,7 +11,7 @@ boxplot_letters(
   fill,
   group,
   test = "tukey",
-  type = c("global", "local"),
+  type = c("two-way", "one-way"),
   where = c("box", "whisker"),
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
@@ -37,8 +37,10 @@ boxplot_letters(
 \item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
 
 \item{type}{If a grouping variable is provided, determines whether to run
-separate tests for each facet (\code{local}) or one (\code{global}) test with
-an interaction term between \code{x} and \code{group}. Defaults to \code{global}.}
+separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
+an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
+This argument only applies if the Tukey test is selected, since there is no two-way
+Kruskal-Wallis test.}
 
 \item{where}{Where to put the letters. Either above the box (\code{box}) or
 above the upper whisker (\code{whisker}).}

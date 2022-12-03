@@ -2,8 +2,8 @@
 #' Groups with at least one letter in common are not significantly different.
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
 #' @param type If a grouping variable is provided, determines whether to run
-#' separate tests for each facet (\code{local}) or one (\code{global}) test with
-#' an interaction term between \code{x} and \code{group}. Defaults to \code{global}.
+#' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
+#' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
 #' @param where Where to put the letters. Either above the box (\code{box}) or
 #' above the upper whisker (\code{whisker}).
 #' @param hjust Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
@@ -38,13 +38,18 @@
 #' data |> ggplot(aes(x=Size, y=Value)) + geom_boxplot() + facet_wrap(~Category) + geom_tukey()
 #' @export
 
-geom_tukey <- function(test = "tukey",
-                       type=c("global", "local"), where = c("box","whisker", "mean", "median"),
-                       hjust=0, vjust=0, size = 4, na.rm = TRUE, threshold = 0.05){
+geom_tukey <- function(test = c("tukey","kruskalmc"), threshold = 0.05,
+                       type=c("two-way", "one-way"),
+                       where = c("box","whisker", "mean", "median"),
+                       hjust=0, vjust=0, size = 4, na.rm = TRUE){
   # store inputs in classed output that can
   # be passed to a `ggplot_add` method
-  type <- match.arg(type, c("global", "local"))
+  test <- match.arg(test, c("tukey", "kruskalmc"))
+  type <- match.arg(type, c("two-way", "one-way"))
   where <- match.arg(where,  c("box","whisker", "mean", "median"))
+  if (test == "kruskalmc"){
+    type <- "one-way"
+  }
   structure(
     "geom_tukey",
     class = "geom_tukey",
@@ -62,25 +67,29 @@ geom_tukey <- function(test = "tukey",
 
 #' @importFrom tidyr drop_na
 #' @noRd
-geom_tukey_ <- function(p, test = "tukey",
-                        type=c("global", "local"), where = c("box","whisker", "mean","median"),
-                        hjust=0, vjust=0, size = 4, na.rm = TRUE, threshold = 0.05) {
+geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
+                        type=c("two-way", "one-way"),
+                        where = c("box","whisker", "mean","median"),
+                        hjust=0, vjust=0, size = 4, na.rm = TRUE) {
   data <- p$data
   if (na.rm){
     data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
   }
   if (length(p$facet$params) == 0){
-    data <- get_tukey_letters(data, p$mapping$x, p$mapping$y, where = where)
+    data <- get_tukey_letters(data = data, x = p$mapping$x, y = p$mapping$y,
+                              test = test, where = where, threshold = threshold)
   } else{
-    if (type == "global"){
+    if (type == "two-way"){
       data <- get_tukey_letters(data = data,
                                 x = c(p$mapping$x, p$facet$params$facets[[1]]),
-                                y= p$mapping$y, where = where,type = type,
+                                y= p$mapping$y, test = test,
+                                where = where,type = type,
                                 threshold = threshold)
-    } else if (type == "local"){
+    } else if (type == "one-way"){
       data <- get_tukey_letters(data = data,
                                 x = p$mapping$x, y= p$mapping$y,
                                 group = p$facet$params$facets[[1]],
+                                test = test,
                                 where = where, type = type,
                                 threshold = threshold)
     }

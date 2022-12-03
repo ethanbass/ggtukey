@@ -14,8 +14,10 @@
 #' @param group A grouping variable (to allow faceting).
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
 #' @param type If a grouping variable is provided, determines whether to run
-#' separate tests for each facet (\code{local}) or one (\code{global}) test with
-#' an interaction term between \code{x} and \code{group}. Defaults to \code{global}.
+#' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
+#' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
+#' This argument only applies if the Tukey test is selected, since there is no two-way
+#' Kruskal-Wallis test.
 #' @param where Where to put the letters. Either above the box (\code{box}) or
 #' above the upper whisker (\code{whisker}).
 #' @param raw Whether to plot raw data and (if so), how. The current options are
@@ -50,13 +52,13 @@
 #' @export
 
 boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
-                            type=c("global", "local"), where = c("box","whisker"),
+                            type=c("two-way", "one-way"), where = c("box","whisker"),
                             raw = c('none', 'points', 'dots', 'jitter'),
                             pt_col = "slategray", ..., hjust=0, vjust=0,
                             lab_size = 4, na.rm = TRUE, threshold = 0.05){
 
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
-  type <- match.arg(type, c("global","local"))
+  type <- match.arg(type, c("two-way","one-way"))
   where <- match.arg(where, c("box","whisker"))
   x.s <- deparse(substitute(x))
   y.s <- deparse(substitute(y))
@@ -113,5 +115,3 @@ boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
                  hjust = hjust, vjust = vjust, size = lab_size,
                  threshold = threshold)
 }
-
-

@@ -5,29 +5,33 @@
 #' @param data A data.frame in long format
 #' @param x Independent variable or vector of variables to plot on x axis
 #' @param y Response variable to plot on y axis
-#' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
+#' @param test Which test to run for pairwise comparisons. Either \code{tukey}
+#' (\code{\link[stats]{TukeyHSD}}) or \code{\link[pgirmess]{kruskalmc}}. Defaults
+#' to \code{tukey}.
 #' @param where Where to put the letters. Either above the box (\code{box}) or
 #' above the upper whisker (\code{whisker}).
 #' @param threshold Statistical threshold for significance. Defaults to 0.05.
 #' @noRd
 
-get_tukey_letters <- function(data, x, y, group=NULL, test = "tukey",
-                              type = c("global", "local"),
+get_tukey_letters <- function(data, x, y, group=NULL, test = c("tukey", "kruskalmc"),
+                              type = c("two-way", "one-way"),
                               where=c("box", "whisker", "mean", "median"),
                               threshold = 0.05){
+  test <- match.arg(test, c("tukey", "kruskalmc"))
   where <- match.arg(where, c("box", "whisker", "mean","median"))
-  type <- match.arg(type, c("global", "local"))
+  type <- match.arg(type, c("two-way", "one-way"))
   if (inherits(x, "quosure") & is.null(group)){
-    letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = "tukey",
+    letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = test,
                                       where = where, threshold = threshold)
   } else{
-    if (type == "global"){
-      letters.df <- place_tukey_letters(data, sapply(x, as_name), as_name(y), test = "tukey",
-                                        where = where, threshold = threshold)
-    } else if (type == "local"){
+    if (type == "two-way"){
+      letters.df <- place_tukey_letters(data, sapply(x, as_name), as_name(y),
+                                        test = test, where = where,
+                                        threshold = threshold)
+    } else if (type == "one-way"){
       letters.df <- purrr::map_dfr(unique(data[[as_name(group)]]), function(gr){
         data %>% filter(!!group == gr) %>%
-          place_tukey_letters(x = as_name(x), y = as_name(y),
+          place_tukey_letters(x = as_name(x), y = as_name(y), test = test,
                               where = where, threshold = threshold) %>%
           mutate(!!group := gr) %>% tibble::remove_rownames()
       })
@@ -37,7 +41,7 @@ get_tukey_letters <- function(data, x, y, group=NULL, test = "tukey",
 }
 
 #' @noRd
-place_tukey_letters <- function(data, x, y, test = "tukey",
+place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
                                 where = c("box","whisker"),
                                 threshold=0.05){
   if (length(x) == 1){
@@ -48,9 +52,17 @@ place_tukey_letters <- function(data, x, y, test = "tukey",
     xlab<-paste(x, collapse=":")
     data[,xlab] <- apply(data[,x], 1, paste, collapse = ":")
   }
-  tukey <- TukeyHSD(aov(form, data = data))[[xlab]][,4]
-  tukey <- tukey[which(!is.na(tukey))]
-  letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
+  if (test == "tukey"){
+    tukey <- TukeyHSD(aov(form, data = data))[[xlab]][,4]
+    tukey <- tukey[which(!is.na(tukey))]
+    letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
+  } else if (test == "kruskalmc"){
+    test <- pgirmess::kruskalmc(form, data=data, probs = threshold)
+    diff <- test$dif.com[,"difference"]
+    names(diff) <- rownames(test$dif.com)
+    letters.df <- data.frame("Letter" = multcompLetters(diff)$Letters)
+  }
+  # letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
   letters.df[[xlab]] <- rownames(letters.df) #Create column based on rownames
 
   placement_fnc <- switch(where,
@@ -58,7 +70,7 @@ place_tukey_letters <- function(data, x, y, test = "tukey",
                           "whisker" = get_whisker,
                           "mean" = mean,
                           "median" = median)
-  placement <- data %>% #We want to create a dataframe to assign the letter position.
+  placement <- data %>% # Create a dataframe to assign the letter position.
     group_by(.data[[xlab]]) %>%
     summarise("Placement.Value" = placement_fnc(.data[[y]]))
   letters.df <- left_join(letters.df, placement, by = xlab) # Merge dataframes

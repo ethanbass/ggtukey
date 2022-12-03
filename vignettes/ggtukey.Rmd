@@ -42,7 +42,7 @@ penguins |> tidyr::drop_na(sex, species) |>
 
 ## Customization
 
-The geom includes several arguments that can be modified to choose the statistics that are done to generate the compact letter displays, as well as adjusting their position on the plot. The `test` argument determines what kind of statistical test is conducted, while the `type` argument controls whether statistics are done `globally` (e.g. with a two-way ANOVA) or `locally` (e.g. in separate one-way ANOVAs for each faceting variable). There are also several arguments that can be used to adjust the positioning of the letters, including `where` to choose the basic position of the labels. Finer adjustments can then be made using the `hjust` and `vjust` arguments to nudge the letters horizontally or vertically.
+The geom includes several arguments that can be modified to choose the statistics that are done to generate the compact letter displays, as well as adjusting their position on the plot. The `test` argument determines what kind of statistical test is conducted, while the `type` argument controls whether statistics are done `two-wayly` (e.g. with a two-way ANOVA) or `one-wayly` (e.g. in separate one-way ANOVAs for each faceting variable). There are also several arguments that can be used to adjust the positioning of the letters, including `where` to choose the basic position of the labels. Finer adjustments can then be made using the `hjust` and `vjust` arguments to nudge the letters horizontally or vertically.
 
 ```{r}
 penguins |> tidyr::drop_na(sex, species) |> 
@@ -61,7 +61,7 @@ The package also includes a convenience function `boxplot_letters` for quickly c
 ## Creating a simple boxplot
 
 ```{r, fig.width=6}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="global")
+boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="two-way")
 ```
 
 ## Creating multipanel plots
@@ -79,10 +79,10 @@ Or look for sex differences within each of our three penguin species:
 boxplot_letters(data=penguins, x=sex, y=body_mass_g, group=species, vjust=-0.5, hjust=-0.2)
 ```
 
-When there is a grouping variable, there are (at least) two possible ways to run the statistics that may yield different results. By default a `global` test is conducted where `TukeyHSD` is run on a full ANOVA ([aov](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov)) with species and sex as an interaction, returning all pairwise comparisons of these two factors. If the comparisons are independent, `type="local"` can be selected to run independent Tukey tests within each group.
+When there is a grouping variable, there are (at least) two possible ways to run the statistics that may yield different results. By default a `two-way` test is conducted where `TukeyHSD` is run on a full ANOVA ([aov](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov)) with species and sex as an interaction, returning all pairwise comparisons of these two factors. If the comparisons are independent, `type="one-way"` can be selected to run independent Tukey tests within each group.
 
 ```{r}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, type="local", vjust=-0.5, hjust=-0.2)
+boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, type="one-way", vjust=-0.5, hjust=-0.2)
 ```
 
 Raw data can also be plotted in various ways using the `raw` argument to specify the desired geom for plotting raw data: e.g. `geom_point` (`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
@@ -120,8 +120,8 @@ p
 
 # References
 
-Piepho, Hans-Peter. \"An Algorithm for a Letter-Based Representation of All-Pairwise Comparisons.\" *Journal of Computational and Graphical Statistics* 13, no. 2 (June 1, 2004): 456--66. <https://doi.org/10.1198/1061860043515>.
+Piepho, Hans-Peter. "An Algorithm for a Letter-Based Representation of All-Pairwise Comparisons." *Journal of Computational and Graphical Statistics* 13, no. 2 (June 1, 2004): 456--66. <https://doi.org/10.1198/1061860043515>.
 
-Piepho, Hans-Peter. \"Letters in Mean Comparisons: What They Do and Don\'t Mean.\" *Agronomy Journal* 110, no. 2 (2018): 431--34. <https://doi.org/10.2134/agronj2017.10.0580>.
+Piepho, Hans-Peter. "Letters in Mean Comparisons: What They Do and Don't Mean." *Agronomy Journal* 110, no. 2 (2018): 431--34. <https://doi.org/10.2134/agronj2017.10.0580>.
 
 Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations of Paired Comparisons. R package version 0.1-8, ([https://CRAN.R-project.org/package=multcompView).](https://CRAN.R-project.org/package=multcompView).)
