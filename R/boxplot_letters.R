@@ -14,11 +14,11 @@
 #' @param group A grouping variable (to allow faceting).
 #' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
 #' @param type If a grouping variable is provided, determines whether to run
-#' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
-#' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
-#' This argument only applies if the Tukey test is selected, since there is no two-way
-#' Kruskal-Wallis test.
-#' @param where Where to put the letters. Either above the box (\code{box}) or
+#' separate tests for each facet (\code{one-way}) or a single (\code{two-way})
+#' test (with an interaction term between \code{x} and \code{group}). Defaults
+#' to \code{two-way}. This argument only applies if the Tukey test is selected,
+#' since there is no two-way Kruskal-Wallis test.
+#' @param where Where to place the letters. Either above the box (\code{box}),
 #' above the upper whisker (\code{whisker}).
 #' @param raw Whether to plot raw data and (if so), how. The current options are
 #' \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or

@@ -4,13 +4,14 @@
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 #' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
-#' @param where Where to put the letters. Either above the box (\code{box}) or
-#' above the upper whisker (\code{whisker}).
-#' @param hjust Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
-#' @param vjust Vertical adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param where Where to put the letters. Either above the box (\code{box}),
+#' above the upper whisker (\code{whisker}), or at the \code{mean} or
+#' \code{median}.
+#' @param hjust Horizontal adjustment of the label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param vjust Vertical adjustment of the label. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @param size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
-#' factors (i.e. \code{x} and \code{group}) before plotting.
+#' factors (i.e. \code{x} and \code{group}) before plotting. Defaults to TRUE.
 #' @param threshold Statistical threshold for significance. Defaults to 0.05.
 #' @author Ethan Bass
 #' @references
