@@ -1,6 +1,7 @@
 #' Create Compact Letter Display Layer
 #' Groups with at least one letter in common are not significantly different.
-#' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
+#' @param test Which test to run for pairwise comparisons. Either \code{tukey}
+#' (the default) or \code{kruskalmc}.
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 #' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.

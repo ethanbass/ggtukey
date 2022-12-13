@@ -17,7 +17,8 @@ geom_tukey(
 )
 }
 \arguments{
-\item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
+\item{test}{Which test to run for pairwise comparisons. Either \code{tukey}
+(the default) or \code{kruskalmc}.}
 
 \item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
 

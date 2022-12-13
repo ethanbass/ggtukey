@@ -12,7 +12,8 @@
 #' @param y variable to plot on y axis.
 #' @param fill column or color to fill boxplots
 #' @param group A grouping variable (to allow faceting).
-#' @param test Which test to run for pairwise comparisons. Default is \code{tukey}.
+#' @param test Which test to run for pairwise comparisons. Either \code{tukey}
+#' (the default) or \code{kruskalmc}.
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or a single (\code{two-way})
 #' test (with an interaction term between \code{x} and \code{group}). Defaults
@@ -51,12 +52,12 @@
 #' boxplot_letters(data, x=Category, y=Value, group=Size)
 #' @export
 
-boxplot_letters <- function(data, x, y, fill, group, test = "tukey",
+boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalmc"),
                             type=c("two-way", "one-way"), where = c("box","whisker"),
                             raw = c('none', 'points', 'dots', 'jitter'),
                             pt_col = "slategray", ..., hjust=0, vjust=0,
                             lab_size = 4, na.rm = TRUE, threshold = 0.05){
-
+  test <- match.arg(test, c("tukey", "kruskalmc"))
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
   type <- match.arg(type, c("two-way","one-way"))
   where <- match.arg(where, c("box","whisker"))

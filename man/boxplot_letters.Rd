@@ -10,7 +10,7 @@ boxplot_letters(
   y,
   fill,
   group,
-  test = "tukey",
+  test = c("tukey", "kruskalmc"),
   type = c("two-way", "one-way"),
   where = c("box", "whisker"),
   raw = c("none", "points", "dots", "jitter"),
@@ -34,7 +34,8 @@ boxplot_letters(
 
 \item{group}{A grouping variable (to allow faceting).}
 
-\item{test}{Which test to run for pairwise comparisons. Default is \code{tukey}.}
+\item{test}{Which test to run for pairwise comparisons. Either \code{tukey}
+(the default) or \code{kruskalmc}.}
 
 \item{type}{If a grouping variable is provided, determines whether to run
 separate tests for each facet (\code{one-way}) or a single (\code{two-way})
