@@ -65,10 +65,9 @@ All-Pairwise Comparisons. Journal of Computational and Graphical Statistics
 13, no. 2 (June 1, 2004): 456–66. \doi{10.1198/1061860043515}.
 \item Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.”
 Agronomy Journal 110, no. 2 (2018): 431–34. \doi{10.2134/agronj2017.10.0580}
-}
-
-#' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations
+\item Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations
 of Paired Comparisons. R package version 0.1-8. \url{https://CRAN.R-project.org/package=multcompView}
+}
 }
 \author{
 Ethan Bass

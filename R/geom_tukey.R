@@ -23,7 +23,7 @@
 #' * Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t Mean.”
 #' Agronomy Journal 110, no. 2 (2018): 431–34. \doi{10.2134/agronj2017.10.0580}
 #'
-#'#' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations
+#' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations
 #' of Paired Comparisons. R package version 0.1-8. \url{https://CRAN.R-project.org/package=multcompView}
 #'
 #' @note Thank you to Hiroaki Yutani (\url{https://yutani.rbind.io/post/2017-11-07-ggplot-add/})
