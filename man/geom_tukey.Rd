@@ -9,9 +9,9 @@ geom_tukey(
   test = c("tukey", "kruskalmc"),
   threshold = 0.05,
   type = c("two-way", "one-way"),
-  where = c("box", "whisker", "mean", "median"),
+  where = c("box", "whisker", "mean", "median", "se", "sd", "cl_normal", "cl_boot"),
   hjust = 0,
-  vjust = 0,
+  vjust = -0.2,
   size = 4,
   na.rm = TRUE
 )
@@ -26,13 +26,15 @@ geom_tukey(
 separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.}
 
-\item{where}{Where to put the letters. Either above the box (\code{box}),
-above the upper whisker (\code{whisker}), or at the \code{mean} or
-\code{median}.}
+\item{where}{Where to put the letters. Either above the box (\code{box}) or
+upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
+\code{median}; or at the top of the error bars calculated from the standard
+error (\code{se}), standard deviation \code{sd}, or 95\% confidence intervals
+returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.}
 
-\item{hjust}{Horizontal adjustment of the label. Argument to \code{\link[ggplot2]{geom_text}}.}
+\item{hjust}{Horizontal adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).}
 
-\item{vjust}{Vertical adjustment of the label. Argument to \code{\link[ggplot2]{geom_text}}.}
+\item{vjust}{Vertical adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).}
 
 \item{size}{Label size. Argument to \code{\link[ggplot2]{geom_text}}.}
 
@@ -44,10 +46,11 @@ Create Compact Letter Display Layer
 Groups with at least one letter in common are not significantly different.
 }
 \note{
-Thank you to Hiroaki Yutani (\url{https://yutani.rbind.io/post/2017-11-07-ggplot-add/})
-and Simon P Couch (\url{https://www.simonpcouch.com/blog/ggplot-pipe-plus/})
-for a couple of very helpful blog posts describing the \code{\link[ggplot2]{ggplot_add}}
-syntax.
+Thank you to \href{https://github.com/yutannihilation}{Hiroaki Yutani}
+and \href{https://github.com/simonpcouch}{Simon P. Couch} for a couple of
+very helpful blog posts (\href{https://yutani.rbind.io/post/2017-11-07-ggplot-add/}{1},
+\href{https://www.simonpcouch.com/blog/ggplot-pipe-plus/}{2}) describing the
+\code{\link[ggplot2]{ggplot_add}} syntax.
 }
 \examples{
 library(ggplot2)

@@ -19,8 +19,11 @@
 #' test (with an interaction term between \code{x} and \code{group}). Defaults
 #' to \code{two-way}. This argument only applies if the Tukey test is selected,
 #' since there is no two-way Kruskal-Wallis test.
-#' @param where Where to place the letters. Either above the box (\code{box}),
-#' above the upper whisker (\code{whisker}).
+#' @param where Where to put the letters. Either above the box (\code{box}) or
+#' upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
+#' \code{median}; or at the top of the error bars calculated from the standard
+#' error (\code{se}), standard deviation \code{sd}, or 95% confidence intervals
+#' returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.
 #' @param raw Whether to plot raw data and (if so), how. The current options are
 #' \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 #' \code{\link[ggplot2]{geom_jitter}}.
@@ -41,7 +44,8 @@
 #' @importFrom stats TukeyHSD aov as.formula median quantile reorder
 #' @import rlang
 #' @author Ethan Bass
-#' @note Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots
+#' @note Adapted from a helpful \href{https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots}{blog post}
+#' by \href{https://github.com/justinmathias}{Justin Mathias}.
 #' @return Returns the specified plot as a \code{ggplot} object.
 #' @examples
 #' set.seed(1)
@@ -53,14 +57,17 @@
 #' @export
 
 boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalmc"),
-                            type=c("two-way", "one-way"), where = c("box","whisker"),
+                            type=c("two-way", "one-way"),
+                            where = c("box","whisker", "mean", "median",
+                                      "se", "sd", "cl_normal", "cl_boot"),
                             raw = c('none', 'points', 'dots', 'jitter'),
-                            pt_col = "slategray", ..., hjust=0, vjust=0,
+                            pt_col = "slategray", ..., hjust = 0, vjust = -0.2,
                             lab_size = 4, na.rm = TRUE, threshold = 0.05){
   test <- match.arg(test, c("tukey", "kruskalmc"))
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
   type <- match.arg(type, c("two-way","one-way"))
-  where <- match.arg(where, c("box","whisker"))
+  where <- match.arg(where, c("box","whisker", "mean", "median",
+                              "se", "sd", "cl_normal", "cl_boot"))
   x.s <- deparse(substitute(x))
   y.s <- deparse(substitute(y))
 

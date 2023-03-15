@@ -12,12 +12,12 @@ boxplot_letters(
   group,
   test = c("tukey", "kruskalmc"),
   type = c("two-way", "one-way"),
-  where = c("box", "whisker"),
+  where = c("box", "whisker", "mean", "median", "se", "sd", "cl_normal", "cl_boot"),
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
   ...,
   hjust = 0,
-  vjust = 0,
+  vjust = -0.2,
   lab_size = 4,
   na.rm = TRUE,
   threshold = 0.05
@@ -43,8 +43,11 @@ test (with an interaction term between \code{x} and \code{group}). Defaults
 to \code{two-way}. This argument only applies if the Tukey test is selected,
 since there is no two-way Kruskal-Wallis test.}
 
-\item{where}{Where to place the letters. Either above the box (\code{box}),
-above the upper whisker (\code{whisker}).}
+\item{where}{Where to put the letters. Either above the box (\code{box}) or
+upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
+\code{median}; or at the top of the error bars calculated from the standard
+error (\code{se}), standard deviation \code{sd}, or 95\% confidence intervals
+returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.}
 
 \item{raw}{Whether to plot raw data and (if so), how. The current options are
 \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
@@ -81,7 +84,8 @@ various ways according to the value of \code{raw}.
 Allows group variable for faceting
 }
 \note{
-Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots
+Adapted from a helpful \href{https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots}{blog post}
+by \href{https://github.com/justinmathias}{Justin Mathias}.
 }
 \examples{
 set.seed(1)

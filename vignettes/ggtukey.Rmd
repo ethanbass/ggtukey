@@ -13,7 +13,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.width=7.2,
-  fig.height=4
+  fig.height=4,
+  dpi=300,
+  out.width="600px"
 )
 ```
 
@@ -61,7 +63,7 @@ The package also includes a convenience function `boxplot_letters` for quickly c
 ## Creating a simple boxplot
 
 ```{r, fig.width=6}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="two-way")
+boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="two-way", lab_size = 4)
 ```
 
 ## Creating multipanel plots
@@ -69,8 +71,7 @@ boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3,
 `boxplot_letters` also supported faceting using the `group` argument. For example, we might want to break our penguin data down by sex:
 
 ```{r}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, vjust=-0.5, 
-                hjust = -0.2)
+boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, vjust=-0.5, hjust = -0.2)
 ```
 
 Or look for sex differences within each of our three penguin species:
@@ -102,7 +103,7 @@ data(iris)
 p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
   geom_bar(aes(fill=Species), position = "identity", stat = "summary", fun = "mean", width=0.6) +
   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
-  geom_tukey(where="mean", vjust=-1.5)
+  geom_tukey(where="cl_normal")
 p
 ```
 
@@ -114,7 +115,7 @@ p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
   geom_jitter(aes(color=Species, fill=Species), alpha=0.6, width=0.15) +
   geom_point(aes(fill = Species), position = "identity", stat = "summary", fun = "mean") +
   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
-  geom_tukey(where="mean", vjust=-1.5) + guides(fill = "none")
+  geom_tukey(where="cl_normal") + guides(fill = "none")
 p
 ```
 

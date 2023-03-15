@@ -2,23 +2,27 @@
 #' Do Tukey Test and calculate letter placement
 #' @importFrom stats TukeyHSD aov as.formula median quantile reorder
 #' @importFrom dplyr left_join
+#' @importFrom rlang as_name
 #' @param data A data.frame in long format
 #' @param x Independent variable or vector of variables to plot on x axis
 #' @param y Response variable to plot on y axis
 #' @param test Which test to run for pairwise comparisons. Either \code{tukey}
 #' (\code{\link[stats]{TukeyHSD}}) or \code{\link[pgirmess]{kruskalmc}}. Defaults
 #' to \code{tukey}.
-#' @param where Where to put the letters. Either above the box (\code{box}) or
-#' above the upper whisker (\code{whisker}).
+#' @param where Where to put the letters. Either above the box (\code{box}),
+#' above the upper whisker (\code{whisker}), or at the \code{mean} or
+#' \code{median}.
 #' @param threshold Statistical threshold for significance. Defaults to 0.05.
 #' @noRd
 
-get_tukey_letters <- function(data, x, y, group=NULL, test = c("tukey", "kruskalmc"),
+get_tukey_letters <- function(data, x, y, group = NULL, test = c("tukey", "kruskalmc"),
                               type = c("two-way", "one-way"),
-                              where=c("box", "whisker", "mean", "median"),
+                              where = c("box", "whisker", "mean",
+                                        "median", "se", "sd", "cl_normal","cl_boot"),
                               threshold = 0.05){
   test <- match.arg(test, c("tukey", "kruskalmc"))
-  where <- match.arg(where, c("box", "whisker", "mean","median"))
+  where <- match.arg(where, c("box", "whisker", "mean","median", "se", "sd",
+                              "cl_normal", "cl_boot"))
   type <- match.arg(type, c("two-way", "one-way"))
   if (inherits(x, "quosure") & is.null(group)){
     letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = test,
@@ -69,7 +73,11 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
                           "box" = get_quantile,
                           "whisker" = get_whisker,
                           "mean" = mean,
-                          "median" = median)
+                          "median" = median,
+                          "se" = get_sem,
+                          "sd" = get_sd,
+                          "cl_normal" = get_cl_normal,
+                          "cl_boot" = get_cl_boot)
   placement <- data %>% # Create a dataframe to assign the letter position.
     group_by(.data[[xlab]]) %>%
     summarise("Placement.Value" = placement_fnc(.data[[y]]))
@@ -78,6 +86,28 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
     letters.df <- left_join(letters.df, unique(data[,c(xlab, x)]), by = xlab)
   }
   letters.df
+}
+
+#' @importFrom stats sd
+#' @noRd
+get_sem <- function(x){
+  mean(x) + sd(x)/sqrt(length(x))
+}
+
+#' @importFrom stats sd
+#' @noRd
+get_sd <- function(x){
+  mean(x) + sd(x)
+}
+
+#' @noRd
+get_cl_normal <- function(x){
+  Hmisc::smean.cl.normal(x)[[3]]
+}
+
+#' @noRd
+get_cl_boot <- function(x){
+  Hmisc::smean.cl.boot(x)[[3]]
 }
 
 #' Check whether color specifications exists.

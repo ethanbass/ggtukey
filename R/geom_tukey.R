@@ -5,11 +5,13 @@
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 #' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
-#' @param where Where to put the letters. Either above the box (\code{box}),
-#' above the upper whisker (\code{whisker}), or at the \code{mean} or
-#' \code{median}.
-#' @param hjust Horizontal adjustment of the label. Argument to \code{\link[ggplot2]{geom_text}}.
-#' @param vjust Vertical adjustment of the label. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param where Where to put the letters. Either above the box (\code{box}) or
+#' upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
+#' \code{median}; or at the top of the error bars calculated from the standard
+#' error (\code{se}), standard deviation \code{sd}, or 95% confidence intervals
+#' returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.
+#' @param hjust Horizontal adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).
+#' @param vjust Vertical adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).
 #' @param size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
 #' factors (i.e. \code{x} and \code{group}) before plotting. Defaults to TRUE.
@@ -26,10 +28,11 @@
 #' * Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView: Visualizations
 #' of Paired Comparisons. R package version 0.1-8. \url{https://CRAN.R-project.org/package=multcompView}
 #'
-#' @note Thank you to Hiroaki Yutani (\url{https://yutani.rbind.io/post/2017-11-07-ggplot-add/})
-#' and Simon P Couch (\url{https://www.simonpcouch.com/blog/ggplot-pipe-plus/})
-#' for a couple of very helpful blog posts describing the \code{\link[ggplot2]{ggplot_add}}
-#' syntax.
+#' @note Thank you to \href{https://github.com/yutannihilation}{Hiroaki Yutani}
+#' and \href{https://github.com/simonpcouch}{Simon P. Couch} for a couple of
+#' very helpful blog posts (\href{https://yutani.rbind.io/post/2017-11-07-ggplot-add/}{1},
+#' \href{https://www.simonpcouch.com/blog/ggplot-pipe-plus/}{2}) describing the
+#' \code{\link[ggplot2]{ggplot_add}} syntax.
 #' @examples
 #' library(ggplot2)
 #' set.seed(1)
@@ -42,13 +45,18 @@
 
 geom_tukey <- function(test = c("tukey","kruskalmc"), threshold = 0.05,
                        type=c("two-way", "one-way"),
-                       where = c("box","whisker", "mean", "median"),
-                       hjust=0, vjust=0, size = 4, na.rm = TRUE){
+                       where = c("box","whisker", "mean", "median", "se", "sd",
+                                 "cl_normal", "cl_boot"),
+                       hjust = 0, vjust = -0.2, size = 4, na.rm = TRUE){
   # store inputs in classed output that can
   # be passed to a `ggplot_add` method
   test <- match.arg(test, c("tukey", "kruskalmc"))
+  if (is.numeric(type)){
+    type <- switch(type, "1"="one-way", "2"="two-way")
+  }
   type <- match.arg(type, c("two-way", "one-way"))
-  where <- match.arg(where,  c("box","whisker", "mean", "median"))
+  where <- match.arg(where,  c("box", "whisker", "mean", "median",
+                               "se", "sd","cl_normal","cl_boot"))
   if (test == "kruskalmc"){
     type <- "one-way"
   }
@@ -71,8 +79,8 @@ geom_tukey <- function(test = c("tukey","kruskalmc"), threshold = 0.05,
 #' @noRd
 geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
                         type=c("two-way", "one-way"),
-                        where = c("box","whisker", "mean","median"),
-                        hjust=0, vjust=0, size = 4, na.rm = TRUE) {
+                        where = c("box","whisker", "mean","median", "se", "sd","cl_normal","cl_boot"),
+                        hjust = 0, vjust = 0, size = 4, na.rm = TRUE) {
   data <- p$data
   if (na.rm){
     data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
@@ -85,7 +93,7 @@ geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
       data <- get_tukey_letters(data = data,
                                 x = c(p$mapping$x, p$facet$params$facets[[1]]),
                                 y= p$mapping$y, test = test,
-                                where = where,type = type,
+                                where = where, type = type,
                                 threshold = threshold)
     } else if (type == "one-way"){
       data <- get_tukey_letters(data = data,
