@@ -18,7 +18,7 @@ various ways according to the value of raw."><!-- mathjax --><script src="https:
     
     <a class="navbar-brand me-2" href="../index.html">ggtukey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,12 +74,12 @@ various ways according to the value of <code>raw</code>.</p>
 <span>  <span class="va">group</span>,</span>
 <span>  test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tukey"</span>, <span class="st">"kruskalmc"</span><span class="op">)</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two-way"</span>, <span class="st">"one-way"</span><span class="op">)</span>,</span>
-<span>  where <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"box"</span>, <span class="st">"whisker"</span><span class="op">)</span>,</span>
+<span>  where <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"box"</span>, <span class="st">"whisker"</span>, <span class="st">"mean"</span>, <span class="st">"median"</span>, <span class="st">"se"</span>, <span class="st">"sd"</span>, <span class="st">"cl_normal"</span>, <span class="st">"cl_boot"</span><span class="op">)</span>,</span>
 <span>  raw <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"points"</span>, <span class="st">"dots"</span>, <span class="st">"jitter"</span><span class="op">)</span>,</span>
 <span>  pt_col <span class="op">=</span> <span class="st">"slategray"</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  hjust <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  vjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>,</span>
 <span>  lab_size <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.05</span></span>
@@ -122,8 +122,11 @@ since there is no two-way Kruskal-Wallis test.</p></dd>
 
 
 <dt>where</dt>
-<dd><p>Where to place the letters. Either above the box (<code>box</code>),
-above the upper whisker (<code>whisker</code>).</p></dd>
+<dd><p>Where to put the letters. Either above the box (<code>box</code>) or
+upper whisker (<code>whisker</code>) of a boxplot; at the <code>mean</code> or
+<code>median</code>; or at the top of the error bars calculated from the standard
+error (<code>se</code>), standard deviation <code>sd</code>, or 95% confidence intervals
+returned by <code><a href="https://rdrr.io/pkg/Hmisc/man/smean.sd.html" class="external-link">smean.cl.normal</a></code>, or <code><a href="https://rdrr.io/pkg/Hmisc/man/smean.sd.html" class="external-link">smean.cl.boot</a></code>.</p></dd>
 
 
 <dt>raw</dt>
@@ -175,7 +178,8 @@ factors (i.e. <code>x</code> and <code>group</code>) before plotting.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Adapted from https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots</p>
+    <p>Adapted from a helpful <a href="https://www.mathiasecology.com/code/add-tukeys-significant-letters-to-ggplots" class="external-link">blog post</a>
+by <a href="https://github.com/justinmathias" class="external-link">Justin Mathias</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

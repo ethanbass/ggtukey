@@ -14,7 +14,7 @@ Groups with at least one letter in common are not significantly different."><!--
     
     <a class="navbar-brand me-2" href="../index.html">ggtukey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,9 +64,9 @@ Groups with at least one letter in common are not significantly different.</p>
 <span>  test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tukey"</span>, <span class="st">"kruskalmc"</span><span class="op">)</span>,</span>
 <span>  threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two-way"</span>, <span class="st">"one-way"</span><span class="op">)</span>,</span>
-<span>  where <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"box"</span>, <span class="st">"whisker"</span>, <span class="st">"mean"</span>, <span class="st">"median"</span><span class="op">)</span>,</span>
+<span>  where <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"box"</span>, <span class="st">"whisker"</span>, <span class="st">"mean"</span>, <span class="st">"median"</span>, <span class="st">"se"</span>, <span class="st">"sd"</span>, <span class="st">"cl_normal"</span>, <span class="st">"cl_boot"</span><span class="op">)</span>,</span>
 <span>  hjust <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  vjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>,</span>
 <span>  size <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -90,17 +90,19 @@ an interaction term between <code>x</code> and <code>group</code>. Defaults to <
 
 
 <dt>where</dt>
-<dd><p>Where to put the letters. Either above the box (<code>box</code>),
-above the upper whisker (<code>whisker</code>), or at the <code>mean</code> or
-<code>median</code>.</p></dd>
+<dd><p>Where to put the letters. Either above the box (<code>box</code>) or
+upper whisker (<code>whisker</code>) of a boxplot; at the <code>mean</code> or
+<code>median</code>; or at the top of the error bars calculated from the standard
+error (<code>se</code>), standard deviation <code>sd</code>, or 95% confidence intervals
+returned by <code><a href="https://rdrr.io/pkg/Hmisc/man/smean.sd.html" class="external-link">smean.cl.normal</a></code>, or <code><a href="https://rdrr.io/pkg/Hmisc/man/smean.sd.html" class="external-link">smean.cl.boot</a></code>.</p></dd>
 
 
 <dt>hjust</dt>
-<dd><p>Horizontal adjustment of the label. Argument to <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></code>.</p></dd>
+<dd><p>Horizontal adjustment of the label. (Argument to <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></code>).</p></dd>
 
 
 <dt>vjust</dt>
-<dd><p>Vertical adjustment of the label. Argument to <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></code>.</p></dd>
+<dd><p>Vertical adjustment of the label. (Argument to <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></code>).</p></dd>
 
 
 <dt>size</dt>
@@ -114,10 +116,11 @@ factors (i.e. <code>x</code> and <code>group</code>) before plotting. Defaults t
 </dl></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Thank you to Hiroaki Yutani (<a href="https://yutani.rbind.io/post/2017-11-07-ggplot-add/" class="external-link">https://yutani.rbind.io/post/2017-11-07-ggplot-add/</a>)
-and Simon P Couch (<a href="https://www.simonpcouch.com/blog/ggplot-pipe-plus/" class="external-link">https://www.simonpcouch.com/blog/ggplot-pipe-plus/</a>)
-for a couple of very helpful blog posts describing the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot_add.html" class="external-link">ggplot_add</a></code>
-syntax.</p>
+    <p>Thank you to <a href="https://github.com/yutannihilation" class="external-link">Hiroaki Yutani</a>
+and <a href="https://github.com/simonpcouch" class="external-link">Simon P. Couch</a> for a couple of
+very helpful blog posts (<a href="https://yutani.rbind.io/post/2017-11-07-ggplot-add/" class="external-link">1</a>,
+<a href="https://www.simonpcouch.com/blog/ggplot-pipe-plus/" class="external-link">2</a>) describing the
+<code><a href="https://ggplot2.tidyverse.org/reference/ggplot_add.html" class="external-link">ggplot_add</a></code> syntax.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
