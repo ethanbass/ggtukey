@@ -5,6 +5,7 @@
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 #' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
+#' @param threshold Statistical threshold for significance. Defaults to 0.05.
 #' @param where Where to put the letters. Either above the box (\code{box}) or
 #' upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
 #' \code{median}; or at the top of the error bars calculated from the standard
@@ -12,10 +13,13 @@
 #' returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.
 #' @param hjust Horizontal adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).
 #' @param vjust Vertical adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).
+#' @param geom Which geom to use to plot letters. Options are \code{text} and \code{label}.
 #' @param size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
+#' @param color Label color.
+#' @param fill Label fill (only applies if \code{geom == "label"}).
+#' @param alpha Label transparency. Defaults to 1.
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
 #' factors (i.e. \code{x} and \code{group}) before plotting. Defaults to TRUE.
-#' @param threshold Statistical threshold for significance. Defaults to 0.05.
 #' @author Ethan Bass
 #' @references
 #' * Piepho, Hans-Peter. An Algorithm for a Letter-Based Representation of
@@ -43,11 +47,13 @@
 #' data |> ggplot(aes(x=Size, y=Value)) + geom_boxplot() + facet_wrap(~Category) + geom_tukey()
 #' @export
 
-geom_tukey <- function(test = c("tukey","kruskalmc"), threshold = 0.05,
-                       type=c("two-way", "one-way"),
+geom_tukey <- function(test = c("tukey","kruskalmc"),
+                       type=c("two-way", "one-way"), threshold = 0.05,
                        where = c("box","whisker", "mean", "median", "se", "sd",
                                  "cl_normal", "cl_boot"),
-                       hjust = 0, vjust = -0.2, size = 4, na.rm = TRUE){
+                       hjust = 0, vjust = -0.2, geom="text",
+                       size = 4, color="black", fill="white",
+                       alpha = 1, na.rm = TRUE){
   # store inputs in classed output that can
   # be passed to a `ggplot_add` method
   test <- match.arg(test, c("tukey", "kruskalmc"))
@@ -71,7 +77,11 @@ geom_tukey <- function(test = c("tukey","kruskalmc"), threshold = 0.05,
     vjust = vjust,
     size = size,
     na.rm = na.rm,
-    threshold = threshold
+    threshold = threshold,
+    color = color,
+    geom=geom,
+    alpha=alpha,
+    fill=fill
   )
 }
 
@@ -80,7 +90,8 @@ geom_tukey <- function(test = c("tukey","kruskalmc"), threshold = 0.05,
 geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
                         type=c("two-way", "one-way"),
                         where = c("box","whisker", "mean","median", "se", "sd","cl_normal","cl_boot"),
-                        hjust = 0, vjust = 0, size = 4, na.rm = TRUE) {
+                        hjust = 0, vjust = 0, size = 4, geom="text",
+                        color="black", fill="white", alpha=1, na.rm = TRUE) {
   data <- p$data
   if (na.rm){
     data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
@@ -104,9 +115,18 @@ geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
                                 threshold = threshold)
     }
   }
-  geom_text(data = data,
-            aes(y = .data$Placement.Value, label = .data$Letter), hjust = hjust,
-            vjust = vjust, size = size)
+  if (geom =="text"){
+    geom_text(data = data,
+              aes(y = .data$Placement.Value, label = .data$Letter), hjust = hjust,
+              vjust = vjust, size = size, color=color, alpha=alpha)
+  } else if (geom == "label"){
+    geom_label(data = data,
+              aes(y = .data$Placement.Value, label = .data$Letter), hjust = hjust,
+              vjust = vjust, size = size, color=color, alpha=alpha,
+              label.size = 0, fill=fill)
+  }
+
+
 }
 
 #' @name ggplot_add.geom_tukey

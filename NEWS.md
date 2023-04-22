@@ -1,3 +1,7 @@
+# ggtukey 0.3.0 dev
+
+* Added additional parameters to `geom_tukey` (`geom`, `color`, `fill,` & `alpha`) for further customization of letters.
+
 # ggtukey 0.2.0
 
 * Added additional options to `where` parameter for placement of letters.

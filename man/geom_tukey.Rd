@@ -7,12 +7,16 @@ Groups with at least one letter in common are not significantly different.}
 \usage{
 geom_tukey(
   test = c("tukey", "kruskalmc"),
-  threshold = 0.05,
   type = c("two-way", "one-way"),
+  threshold = 0.05,
   where = c("box", "whisker", "mean", "median", "se", "sd", "cl_normal", "cl_boot"),
   hjust = 0,
   vjust = -0.2,
+  geom = "text",
   size = 4,
+  color = "black",
+  fill = "white",
+  alpha = 1,
   na.rm = TRUE
 )
 }
@@ -20,11 +24,11 @@ geom_tukey(
 \item{test}{Which test to run for pairwise comparisons. Either \code{tukey}
 (the default) or \code{kruskalmc}.}
 
-\item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
-
 \item{type}{If a grouping variable is provided, determines whether to run
 separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.}
+
+\item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
 
 \item{where}{Where to put the letters. Either above the box (\code{box}) or
 upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
@@ -36,7 +40,15 @@ returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl
 
 \item{vjust}{Vertical adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).}
 
+\item{geom}{Which geom to use to plot letters. Options are \code{text} and \code{label}.}
+
 \item{size}{Label size. Argument to \code{\link[ggplot2]{geom_text}}.}
+
+\item{color}{Label color.}
+
+\item{fill}{Label fill (only applies if \code{geom == "label"}).}
+
+\item{alpha}{Label transparency. Defaults to 1.}
 
 \item{na.rm}{Logical. Whether to remove observations with NAs for the provided
 factors (i.e. \code{x} and \code{group}) before plotting. Defaults to TRUE.}

@@ -89,7 +89,7 @@ boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalm
     geom_box <- purrr::partial(geom_boxplot, color = "black", fill = {{fill}})
   }
 
-  p <- data %>% #Dataframe from which data will be drawn
+  p <- data %>% # Dataframe from which data will be drawn
     ggplot(aes(x = {{x}}, y = {{y}})) +
     geom_box() +
     theme_article() + #Clean, minimal theme courtesy of the "egg" package
@@ -117,7 +117,7 @@ boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalm
     }
   }
   if (!missing(group)){
-    p <- p <- p + facet_wrap(vars({{group}}))
+    p <- p + facet_wrap(vars({{group}}))
   }
   p + geom_tukey(test = test, type = type, where = where,
                  hjust = hjust, vjust = vjust, size = lab_size,

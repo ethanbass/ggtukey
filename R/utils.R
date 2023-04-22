@@ -24,6 +24,9 @@ get_tukey_letters <- function(data, x, y, group = NULL, test = c("tukey", "krusk
   where <- match.arg(where, c("box", "whisker", "mean","median", "se", "sd",
                               "cl_normal", "cl_boot"))
   type <- match.arg(type, c("two-way", "one-way"))
+  # if (any(grepl("-", levels(data[,rlang::as_name(x), drop = TRUE])))){
+  #   stop("Factor names cannot contain dashes. Please recode factor levels before proceeding.")
+  # }
   if (inherits(x, "quosure") & is.null(group)){
     letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = test,
                                       where = where, threshold = threshold)
