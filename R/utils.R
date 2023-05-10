@@ -1,5 +1,4 @@
-
-#' Do Tukey Test and calculate letter placement
+#' Perform Tukey Test and calculate letter placement
 #' @importFrom stats TukeyHSD aov as.formula median quantile reorder
 #' @importFrom dplyr left_join
 #' @importFrom rlang as_name
@@ -28,13 +27,14 @@ get_tukey_letters <- function(data, x, y, group = NULL, test = c("tukey", "krusk
   #   stop("Factor names cannot contain dashes. Please recode factor levels before proceeding.")
   # }
   if (inherits(x, "quosure") & is.null(group)){
-    letters.df <- place_tukey_letters(data, as_name(x), as_name(y), test = test,
-                                      where = where, threshold = threshold)
+    letters.df <- place_tukey_letters(data = data, x = as_name(x), y = as_name(y),
+                                      test = test, where = where,
+                                      threshold = threshold)
   } else{
     if (type == "two-way"){
-      letters.df <- place_tukey_letters(data, sapply(x, as_name), as_name(y),
-                                        test = test, where = where,
-                                        threshold = threshold)
+      letters.df <- place_tukey_letters(data = data, x = sapply(x, as_name),
+                                        y = as_name(y), test = test,
+                                        where = where, threshold = threshold)
     } else if (type == "one-way"){
       letters.df <- purrr::map_dfr(unique(data[[as_name(group)]]), function(gr){
         data %>% filter(!!group == gr) %>%
@@ -47,6 +47,7 @@ get_tukey_letters <- function(data, x, y, group = NULL, test = c("tukey", "krusk
   letters.df
 }
 
+#' Place Tukey Letters
 #' @noRd
 place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
                                 where = c("box","whisker"),
@@ -56,7 +57,7 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
     xlab <- x
   } else {
     form <- as.formula(paste(y, paste(x, collapse="*"), sep="~"))
-    xlab<-paste(x, collapse=":")
+    xlab <- paste(x, collapse=":")
     data[,xlab] <- apply(data[,x], 1, paste, collapse = ":")
   }
   if (test == "tukey"){
@@ -64,8 +65,8 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
     tukey <- tukey[which(!is.na(tukey))]
     letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
   } else if (test == "kruskalmc"){
-    test <- pgirmess::kruskalmc(form, data=data, probs = threshold)
-    diff <- test$dif.com[,"difference"]
+    test <- pgirmess::kruskalmc(form, data = data, probs = threshold)
+    diff <- test$dif.com[,"stat.signif"]
     names(diff) <- rownames(test$dif.com)
     letters.df <- data.frame("Letter" = multcompLetters(diff)$Letters)
   }
@@ -91,31 +92,33 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc"),
   letters.df
 }
 
+#' Calculate standard error of the mean error bar
 #' @importFrom stats sd
 #' @noRd
 get_sem <- function(x){
   mean(x) + sd(x)/sqrt(length(x))
 }
 
+#' Calculate standard deviation error bar
 #' @importFrom stats sd
 #' @noRd
 get_sd <- function(x){
   mean(x) + sd(x)
 }
 
+#' Calculate cl normal error bar
 #' @noRd
 get_cl_normal <- function(x){
   Hmisc::smean.cl.normal(x)[[3]]
 }
 
+#' Calculate cl boot error bar
 #' @noRd
 get_cl_boot <- function(x){
   Hmisc::smean.cl.boot(x)[[3]]
 }
 
 #' Check whether color specifications exists.
-#'
-#' @export
 #' @import grDevices
 #' @description Function to check whether all specified colors are
 #' actual colors.
@@ -146,7 +149,7 @@ get_cl_boot <- function(x){
 #' test <- c('#FH0000', 3, '#FF00991', 'lavendel', '#AABBCCFFF')
 #' is.color(test)
 #' is.color(test, return.colors=TRUE)
-#'
+#' @export
 is.color <- function(x, return.colors = FALSE) {
   # numeric colors, max 8
   if (is.numeric(x)) {
@@ -171,12 +174,14 @@ is.color <- function(x, return.colors = FALSE) {
   }
 }
 
+#' Calculate quantile
 #' @importFrom stats quantile
 #' @noRd
 get_quantile <- function(x){
   quantile(x, na.rm=TRUE)[4]
 }
 
+#' Calculate boxplot whisker
 #' @importFrom stats IQR
 #'@noRd
 get_whisker <- function(x){

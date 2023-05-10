@@ -43,7 +43,6 @@ is.color(c('#FF0000CC', 'red', 1, '#FF0000'), return.colors=TRUE)
 test <- c('#FH0000', 3, '#FF00991', 'lavendel', '#AABBCCFFF')
 is.color(test)
 is.color(test, return.colors=TRUE)
-
 }
 \author{
 Jacolien van Rij

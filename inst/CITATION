@@ -5,10 +5,10 @@ citEntry(
   title    = "ggtukey: Compact Letter Displays for 'ggplot2'",
   author   = "Ethan Bass",
   year     = "2023",
-  note     = "version 0.3.0",
+  note     = "version 0.4.0",
   url      = "https://ethanbass.github.io/ggtukey/",
   doi      = "",
   textVersion = paste("Bass, E. (2023).",
-        "ggtukey: Compact Letter Displays for 'ggplot2' (version 0.3.0)."
+        "ggtukey: Compact Letter Displays for 'ggplot2' (version 0.4.0)."
         )
   )

@@ -1,4 +1,8 @@
-# ggtukey 0.3.0 dev
+# ggtukey 0.4.0
+
+* Fixed bug when using `kruskalmc` (Dunn test) due to changes in `pgirmess::kruskalmc` output.
+
+# ggtukey 0.3.0
 
 * Added additional parameters to `geom_tukey` (`geom`, `color`, `fill,` & `alpha`) for further customization of letters.
 
