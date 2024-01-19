@@ -33,11 +33,11 @@ The package includes a geom (`geom_tukey`) that can be used to easily overlay [c
 
 ```{r}
 penguins |> tidyr::drop_na(sex, species) |> 
-  ggplot(aes(x=species, y=body_mass_g)) +
+  ggplot(aes(x = species, y = body_mass_g)) +
   geom_boxplot() + 
-  geom_jitter(col="slategray", alpha=0.6) +
+  geom_jitter(col = "slategray", alpha = 0.6) +
   facet_wrap(~sex) +
-  geom_tukey(where="whisker") +
+  geom_tukey(where = "whisker") +
   ylab("Body mass (g)") +
   xlab("Species") + egg::theme_article()
 ```
@@ -63,7 +63,8 @@ The package also includes a convenience function `boxplot_letters` for quickly c
 ## Creating a simple boxplot
 
 ```{r, fig.width=6}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3, type="two-way", lab_size = 4)
+boxplot_letters(data = penguins, x = species, y = body_mass_g, 
+                vjust = -0.5, hjust = -0.3, type = "two-way", lab_size = 4)
 ```
 
 ## Creating multipanel plots
@@ -71,25 +72,30 @@ boxplot_letters(data=penguins, x=species, y=body_mass_g, vjust=-0.5, hjust=-0.3,
 `boxplot_letters` also supported faceting using the `group` argument. For example, we might want to break our penguin data down by sex:
 
 ```{r}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, vjust=-0.5, hjust = -0.2)
+boxplot_letters(data = penguins, x = species, y = body_mass_g,
+                group=sex, vjust=-0.5, hjust = -0.2)
 ```
 
 Or look for sex differences within each of our three penguin species:
 
 ```{r}
-boxplot_letters(data=penguins, x=sex, y=body_mass_g, group=species, vjust=-0.5, hjust=-0.2)
+boxplot_letters(data = penguins, x = sex, y = body_mass_g, 
+                group = species, vjust = -0.5, hjust = -0.2)
 ```
 
 When there is a grouping variable, there are (at least) two possible ways to run the statistics that may yield different results. By default a `two-way` test is conducted where `TukeyHSD` is run on a full ANOVA ([aov](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov)) with species and sex as an interaction, returning all pairwise comparisons of these two factors. If the comparisons are independent, `type="one-way"` can be selected to run independent Tukey tests within each group.
 
 ```{r}
-boxplot_letters(data=penguins, x=species, y=body_mass_g, group=sex, type="one-way", vjust=-0.5, hjust=-0.2)
+boxplot_letters(data = penguins, x = species, y = body_mass_g,
+                group = sex, type = "one-way", vjust = -0.5, hjust = -0.2)
 ```
 
 Raw data can also be plotted in various ways using the `raw` argument to specify the desired geom for plotting raw data: e.g. `geom_point` (`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
 
 ```{r}
-boxplot_letters(data=penguins, x = species, y = body_mass_g, group = sex, vjust = -0.5, hjust=-0.2, raw = "jitter", alpha=0.6, pt_col=species)
+boxplot_letters(data = penguins, x = species, y = body_mass_g, 
+                group = sex, vjust = -0.5, hjust=-0.2, raw = "jitter",
+                alpha = 0.6, pt_col = species)
 ```
 
 # Other types of plots
@@ -101,9 +107,9 @@ To create a dynamite plot (which I do not advocate):
 ```{r}
 data(iris)
 p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
-  geom_bar(aes(fill=Species), position = "identity", stat = "summary", fun = "mean", width=0.6) +
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
-  geom_tukey(where="cl_normal")
+  geom_bar(aes(fill=Species), position = "identity", stat = "summary", fun = "mean", width = 0.6) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.3) + 
+  geom_tukey(where = "cl_normal")
 p
 ```
 
@@ -111,11 +117,11 @@ p
 
 ```{r}
 data(iris)
-p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
-  geom_jitter(aes(color=Species, fill=Species), alpha=0.6, width=0.15) +
+p<-ggplot(data = iris, aes(x = Species, y = Petal.Width)) +
+  geom_jitter(aes(color = Species, fill = Species), alpha = 0.6, width = 0.15) +
   geom_point(aes(fill = Species), position = "identity", stat = "summary", fun = "mean") +
-  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width=0.3) + 
-  geom_tukey(where="cl_normal") + guides(fill = "none")
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.3) + 
+  geom_tukey(where = "cl_normal") + guides(fill = "none")
 p
 ```
 
