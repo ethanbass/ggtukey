@@ -13,7 +13,8 @@
 #' @param fill column or color to fill boxplots
 #' @param group A grouping variable (to allow faceting).
 #' @param test Which test to run for pairwise comparisons. Either \code{tukey}
-#' (the default) or \code{kruskalmc}.
+#' (the default), \code{\link[pgirmess]{kruskalmc}}, or
+#' \code{\link[rstatix]{dunn_test}}.
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or a single (\code{two-way})
 #' test (with an interaction term between \code{x} and \code{group}). Defaults
@@ -28,7 +29,6 @@
 #' \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 #' \code{\link[ggplot2]{geom_jitter}}.
 #' @param pt_col Color of points, if raw data is plotted.
-#' @param ... Additional arguments to \code{\link[ggplot2]{geom_point}},
 #' \code{\link[ggplot2]{geom_dotplot}}, or \code{\link[ggplot2]{geom_jitter}},
 #' according to the value of \code{raw}.
 #' @param hjust Horizontal adjustment of label. Argument to \code{\link[ggplot2]{geom_text}}.
@@ -37,6 +37,10 @@
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
 #' factors (i.e. \code{x} and \code{group}) before plotting.
 #' @param threshold Statistical threshold for significance. Defaults to 0.05.
+#' @param reversed Logical. Argument to
+#' \code{\link[multcompView]{multcompLetters3}}. Determines whether order of
+#' letters should be reversed. Defaults to \code{FALSE}.
+#' @param ... Additional arguments to \code{\link[ggplot2]{geom_point}},
 #' @import dplyr
 #' @import egg
 #' @import multcompView
@@ -56,14 +60,16 @@
 #' boxplot_letters(data, x=Category, y=Value, group=Size)
 #' @export
 
-boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalmc"),
+boxplot_letters <- function(data, x, y, fill, group,
+                            test = c("tukey", "kruskalmc", "dunn"),
                             type=c("two-way", "one-way"),
                             where = c("box","whisker", "mean", "median",
                                       "se", "sd", "cl_normal", "cl_boot"),
                             raw = c('none', 'points', 'dots', 'jitter'),
-                            pt_col = "slategray", ..., hjust = 0, vjust = -0.2,
-                            lab_size = 4, na.rm = TRUE, threshold = 0.05){
-  test <- match.arg(test, c("tukey", "kruskalmc"))
+                            pt_col = "slategray", hjust = 0, vjust = -0.2,
+                            lab_size = 4, na.rm = TRUE, threshold = 0.05,
+                            reversed = FALSE, ...){
+  test <- match.arg(test, c("tukey", "kruskalmc", "dunn"))
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
   type <- match.arg(type, c("two-way","one-way"))
   where <- match.arg(where, c("box","whisker", "mean", "median",
@@ -97,9 +103,11 @@ boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalm
 
   if (raw == "points"){
     if (deparse(substitute(pt_col)) %in% colnames(data)){
-      p <- p + geom_point(aes(col={{pt_col}}), position = position_dodge(width = 0.1), ...)
+      p <- p + geom_point(aes(col={{pt_col}}),
+                          position = position_dodge(width = 0.1), ...)
     } else if (is.color(pt_col)){
-      p <- p + geom_point(position = position_dodge(width = 0.1), col = pt_col, ...)
+      p <- p + geom_point(position = position_dodge(width = 0.1), col = pt_col,
+                          ...)
     }
   } else if (raw == "dots"){
     if (deparse(substitute(pt_col)) %in% colnames(data)){
@@ -121,5 +129,5 @@ boxplot_letters <- function(data, x, y, fill, group, test = c("tukey", "kruskalm
   }
   p + geom_tukey(test = test, type = type, where = where,
                  hjust = hjust, vjust = vjust, size = lab_size,
-                 threshold = threshold)
+                 threshold = threshold, reversed = reversed)
 }

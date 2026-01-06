@@ -10,17 +10,18 @@ boxplot_letters(
   y,
   fill,
   group,
-  test = c("tukey", "kruskalmc"),
+  test = c("tukey", "kruskalmc", "dunn"),
   type = c("two-way", "one-way"),
   where = c("box", "whisker", "mean", "median", "se", "sd", "cl_normal", "cl_boot"),
   raw = c("none", "points", "dots", "jitter"),
   pt_col = "slategray",
-  ...,
   hjust = 0,
   vjust = -0.2,
   lab_size = 4,
   na.rm = TRUE,
-  threshold = 0.05
+  threshold = 0.05,
+  reversed = FALSE,
+  ...
 )
 }
 \arguments{
@@ -35,7 +36,8 @@ boxplot_letters(
 \item{group}{A grouping variable (to allow faceting).}
 
 \item{test}{Which test to run for pairwise comparisons. Either \code{tukey}
-(the default) or \code{kruskalmc}.}
+(the default), \code{\link[pgirmess]{kruskalmc}}, or
+\code{\link[rstatix]{dunn_test}}.}
 
 \item{type}{If a grouping variable is provided, determines whether to run
 separate tests for each facet (\code{one-way}) or a single (\code{two-way})
@@ -53,9 +55,7 @@ returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl
 \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 \code{\link[ggplot2]{geom_jitter}}.}
 
-\item{pt_col}{Color of points, if raw data is plotted.}
-
-\item{...}{Additional arguments to \code{\link[ggplot2]{geom_point}},
+\item{pt_col}{Color of points, if raw data is plotted.
 \code{\link[ggplot2]{geom_dotplot}}, or \code{\link[ggplot2]{geom_jitter}},
 according to the value of \code{raw}.}
 
@@ -69,6 +69,12 @@ according to the value of \code{raw}.}
 factors (i.e. \code{x} and \code{group}) before plotting.}
 
 \item{threshold}{Statistical threshold for significance. Defaults to 0.05.}
+
+\item{reversed}{Logical. Argument to
+\code{\link[multcompView]{multcompLetters3}}. Determines whether order of
+letters should be reversed. Defaults to \code{FALSE}.}
+
+\item{...}{Additional arguments to \code{\link[ggplot2]{geom_point}},}
 }
 \value{
 Returns the specified plot as a \code{ggplot} object.

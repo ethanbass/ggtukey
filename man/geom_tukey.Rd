@@ -6,7 +6,7 @@
 Groups with at least one letter in common are not significantly different.}
 \usage{
 geom_tukey(
-  test = c("tukey", "kruskalmc"),
+  test = c("tukey", "kruskalmc", "dunn"),
   type = c("two-way", "one-way"),
   threshold = 0.05,
   where = c("box", "whisker", "mean", "median", "se", "sd", "cl_normal", "cl_boot"),
@@ -17,12 +17,14 @@ geom_tukey(
   color = "black",
   fill = "white",
   alpha = 1,
-  na.rm = TRUE
+  na.rm = TRUE,
+  reversed = FALSE
 )
 }
 \arguments{
 \item{test}{Which test to run for pairwise comparisons. Either \code{tukey}
-(the default) or \code{kruskalmc}.}
+(the default), \code{\link[pgirmess]{kruskalmc}}, or
+\code{\link[rstatix]{dunn_test}}.}
 
 \item{type}{If a grouping variable is provided, determines whether to run
 separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
@@ -36,11 +38,14 @@ upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
 error (\code{se}), standard deviation \code{sd}, or 95\% confidence intervals
 returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.}
 
-\item{hjust}{Horizontal adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).}
+\item{hjust}{Horizontal adjustment of the label. (Argument to
+\code{\link[ggplot2]{geom_text}}).}
 
-\item{vjust}{Vertical adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).}
+\item{vjust}{Vertical adjustment of the label. (Argument to
+\code{\link[ggplot2]{geom_text}}).}
 
-\item{geom}{Which geom to use to plot letters. Options are \code{text} and \code{label}.}
+\item{geom}{Which geom to use to plot letters. Options are \code{text} and
+\code{label}.}
 
 \item{size}{Label size. Argument to \code{\link[ggplot2]{geom_text}}.}
 
@@ -51,7 +56,12 @@ returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl
 \item{alpha}{Label transparency. Defaults to 1.}
 
 \item{na.rm}{Logical. Whether to remove observations with NAs for the provided
-factors (i.e. \code{x} and \code{group}) before plotting. Defaults to TRUE.}
+factors (i.e. \code{x} and \code{group}) before plotting. Defaults to
+\code{TRUE}.}
+
+\item{reversed}{Logical. Argument to
+\code{\link[multcompView]{multcompLetters3}}. Determines whether order of
+letters should be reversed. Defaults to \code{FALSE}.}
 }
 \description{
 Create Compact Letter Display Layer

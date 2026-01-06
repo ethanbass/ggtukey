@@ -1,3 +1,9 @@
+# ggtukey 0.5.0
+
+* Added support for Dunn's test as implemented in the `rstatix` package.
+* Changed default letter order, so the group with the largest value is assigned the 'a'.
+* Added `reversed` argument to reverse letter order (so that the small value is assigned the 'a').
+
 # ggtukey 0.4.0
 
 * Fixed bug when using `kruskalmc` (Dunn test) due to changes in `pgirmess::kruskalmc` output.

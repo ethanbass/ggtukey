@@ -1,6 +1,6 @@
 Package: ggtukey
 Title: Compact Letter Displays for Multiple Comparisons in 'ggplot2'
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: 
     person("Ethan", "Bass", , "ethanbass@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6175-6739"))
@@ -10,7 +10,7 @@ Description: Provides a simple interface to visualize paired comparisons in 'ggp
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Requires: R >= 4.1.0
 Imports: 
     dplyr,
@@ -21,6 +21,7 @@ Imports:
     pgirmess,
     purrr,
     rlang,
+    rstatix,
     stats,
     tibble,
     tidyr
@@ -32,6 +33,6 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr
 VignetteBuilder: knitr
-URL: https://ethanbass.github.io/ggtukey, https://github.com/ethanbass/ggtukey
-BugReports: https://github.com/ethanbass/ggtukey/issues
+URL: https://ethanbass.github.io/ggtukey/, https://github.com/ethanbass/ggtukey/
+BugReports: https://github.com/ethanbass/ggtukey/issues/
 Config/testthat/edition: 3

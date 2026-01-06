@@ -1,7 +1,8 @@
 #' Create Compact Letter Display Layer
 #' Groups with at least one letter in common are not significantly different.
 #' @param test Which test to run for pairwise comparisons. Either \code{tukey}
-#' (the default) or \code{kruskalmc}.
+#' (the default), \code{\link[pgirmess]{kruskalmc}}, or
+#' \code{\link[rstatix]{dunn_test}}.
 #' @param type If a grouping variable is provided, determines whether to run
 #' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 #' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
@@ -11,15 +12,22 @@
 #' \code{median}; or at the top of the error bars calculated from the standard
 #' error (\code{se}), standard deviation \code{sd}, or 95% confidence intervals
 #' returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.
-#' @param hjust Horizontal adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).
-#' @param vjust Vertical adjustment of the label. (Argument to \code{\link[ggplot2]{geom_text}}).
-#' @param geom Which geom to use to plot letters. Options are \code{text} and \code{label}.
+#' @param hjust Horizontal adjustment of the label. (Argument to
+#' \code{\link[ggplot2]{geom_text}}).
+#' @param vjust Vertical adjustment of the label. (Argument to
+#' \code{\link[ggplot2]{geom_text}}).
+#' @param geom Which geom to use to plot letters. Options are \code{text} and
+#' \code{label}.
 #' @param size Label size. Argument to \code{\link[ggplot2]{geom_text}}.
 #' @param color Label color.
 #' @param fill Label fill (only applies if \code{geom == "label"}).
 #' @param alpha Label transparency. Defaults to 1.
 #' @param na.rm Logical. Whether to remove observations with NAs for the provided
-#' factors (i.e. \code{x} and \code{group}) before plotting. Defaults to TRUE.
+#' factors (i.e. \code{x} and \code{group}) before plotting. Defaults to
+#' \code{TRUE}.
+#' @param reversed Logical. Argument to
+#' \code{\link[multcompView]{multcompLetters3}}. Determines whether order of
+#' letters should be reversed. Defaults to \code{FALSE}.
 #' @author Ethan Bass
 #' @references
 #' * Piepho, Hans-Peter. An Algorithm for a Letter-Based Representation of
@@ -47,23 +55,27 @@
 #' data |> ggplot(aes(x=Size, y=Value)) + geom_boxplot() + facet_wrap(~Category) + geom_tukey()
 #' @export
 
-geom_tukey <- function(test = c("tukey","kruskalmc"),
+geom_tukey <- function(test = c("tukey", "kruskalmc", "dunn"),
                        type=c("two-way", "one-way"), threshold = 0.05,
                        where = c("box","whisker", "mean", "median", "se", "sd",
                                  "cl_normal", "cl_boot"),
                        hjust = 0, vjust = -0.2, geom="text",
                        size = 4, color="black", fill="white",
-                       alpha = 1, na.rm = TRUE){
+                       alpha = 1, na.rm = TRUE, reversed = FALSE){
   # store inputs in classed output that can
   # be passed to a `ggplot_add` method
-  test <- match.arg(test, c("tukey", "kruskalmc"))
+  test <- match.arg(test, c("tukey", "kruskalmc", "dunn"))
   if (is.numeric(type)){
     type <- switch(type, "1"="one-way", "2"="two-way")
   }
   type <- match.arg(type, c("two-way", "one-way"))
   where <- match.arg(where,  c("box", "whisker", "mean", "median",
-                               "se", "sd","cl_normal","cl_boot"))
+                               "se", "sd", "cl_normal", "cl_boot"))
   if (test == "kruskalmc"){
+    if (type == "two-way"){
+      warning("Only one-way tests are available with the kruskalmc method.",
+              immediate. = TRUE)
+    }
     type <- "one-way"
   }
   structure(
@@ -79,51 +91,57 @@ geom_tukey <- function(test = c("tukey","kruskalmc"),
     na.rm = na.rm,
     threshold = threshold,
     color = color,
-    geom=geom,
-    alpha=alpha,
-    fill=fill
+    geom = geom,
+    alpha = alpha,
+    fill = fill,
+    reversed = reversed
   )
 }
 
 #' @importFrom tidyr drop_na
 #' @noRd
-geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
+geom_tukey_ <- function(p, test = c("tukey", "kruskalmc"), threshold = 0.05,
                         type=c("two-way", "one-way"),
-                        where = c("box","whisker", "mean","median", "se", "sd","cl_normal","cl_boot"),
-                        hjust = 0, vjust = 0, size = 4, geom="text",
-                        color="black", fill="white", alpha=1, na.rm = TRUE) {
+                        where = c("box","whisker", "mean","median", "se",
+                                  "sd","cl_normal","cl_boot"),
+                        hjust = 0, vjust = 0, size = 4, geom = "text",
+                        color = "black", fill = "white", alpha = 1,
+                        na.rm = TRUE, reversed = FALSE) {
   data <- p$data
   if (na.rm){
     data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
   }
   if (length(p$facet$params) == 0){
     data <- get_tukey_letters(data = data, x = p$mapping$x, y = p$mapping$y,
-                              test = test, where = where, threshold = threshold)
+                              test = test, where = where, threshold = threshold,
+                              reversed = reversed)
   } else{
     if (type == "two-way"){
       data <- get_tukey_letters(data = data,
                                 x = c(p$mapping$x, p$facet$params$facets[[1]]),
                                 y= p$mapping$y, test = test,
                                 where = where, type = type,
-                                threshold = threshold)
+                                threshold = threshold,
+                                reversed = reversed)
     } else if (type == "one-way"){
       data <- get_tukey_letters(data = data,
                                 x = p$mapping$x, y= p$mapping$y,
                                 group = p$facet$params$facets[[1]],
                                 test = test,
                                 where = where, type = type,
-                                threshold = threshold)
+                                threshold = threshold,
+                                reversed = reversed)
     }
   }
-  if (geom =="text"){
+  if (geom == "text"){
     geom_text(data = data,
               aes(y = .data$Placement.Value, label = .data$Letter), hjust = hjust,
-              vjust = vjust, size = size, color=color, alpha=alpha)
+              vjust = vjust, size = size, color = color, alpha = alpha)
   } else if (geom == "label"){
     geom_label(data = data,
               aes(y = .data$Placement.Value, label = .data$Letter), hjust = hjust,
-              vjust = vjust, size = size, color=color, alpha=alpha,
-              label.size = 0, fill=fill)
+              vjust = vjust, size = size, color = color, alpha = alpha,
+              label.size = 0, fill = fill)
   }
 
 
@@ -133,7 +151,7 @@ geom_tukey_ <- function(p, test = c("tukey","kruskalmc"), threshold = 0.05,
 #' @export
 #' @noRd
 #' @note Adapted from (https://www.simonpcouch.com/blog/ggplot-pipe-plus/)
-ggplot_add.geom_tukey <- function(object, plot, object_name) {
+ggplot_add.geom_tukey <- function(object, plot, object_name, ...) {
 
   fn <- attr(object, "fn")
 
