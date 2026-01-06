@@ -1,6 +1,7 @@
 # ggtukey
 <!-- badges: start -->
   [![ggtukey status badge](https://ethanbass.r-universe.dev/badges/ggtukey)](https://ethanbass.r-universe.dev)
+  [![Last commit](https://img.shields.io/github/last-commit/ethanbass/ggtukey)]()
   [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 <!-- badges: end -->
 
