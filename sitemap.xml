@@ -1,39 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/404.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/articles/ggtukey.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/reference/boxplot_letters.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/reference/geom_tukey.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/reference/is.color.html</loc>
-  </url>
-  <url>
-    <loc>https://ethanbass.github.io/ggtukey/reference/pipe.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://ethanbass.github.io/ggtukey/404.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/LICENSE.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/articles/ggtukey.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/articles/index.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/authors.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/index.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/news/index.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/reference/boxplot_letters.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/reference/geom_tukey.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/reference/index.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/reference/is.color.html</loc></url>
+<url><loc>https://ethanbass.github.io/ggtukey/reference/pipe.html</loc></url>
 </urlset>
+

@@ -1,0 +1,175 @@
+# ggtukey
+
+``` r
+library(ggtukey)
+library(ggplot2)
+library(palmerpenguins)
+#> 
+#> Attaching package: 'palmerpenguins'
+#> The following objects are masked from 'package:datasets':
+#> 
+#>     penguins, penguins_raw
+library(Hmisc)
+#> 
+#> Attaching package: 'Hmisc'
+#> The following objects are masked from 'package:base':
+#> 
+#>     format.pval, units
+data(penguins)
+```
+
+## Introduction to `geom_tukey`
+
+The package includes a geom (`geom_tukey`) that can be used to easily
+overlay [compact letter
+displays](https://en.wikipedia.org/wiki/Compact_letter_display) onto
+[ggplot2](https://ggplot2.tidyverse.org/) figures.
+
+``` r
+penguins |> tidyr::drop_na(sex, species) |> 
+  ggplot(aes(x = species, y = body_mass_g)) +
+  geom_boxplot() + 
+  geom_jitter(col = "slategray", alpha = 0.6) +
+  facet_wrap(~sex) +
+  geom_tukey(where = "whisker") +
+  ylab("Body mass (g)") +
+  xlab("Species") + egg::theme_article()
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-2-1.png)
+
+### Customization
+
+The geom includes several arguments that can be modified to choose the
+statistics that are done to generate the compact letter displays, as
+well as adjusting their position on the plot. The `test` argument
+determines what kind of statistical test is conducted, while the `type`
+argument controls whether statistics are done `two-wayly` (e.g. with a
+two-way ANOVA) or `one-wayly` (e.g. in separate one-way ANOVAs for each
+faceting variable). There are also several arguments that can be used to
+adjust the positioning of the letters, including `where` to choose the
+basic position of the labels. Finer adjustments can then be made using
+the `hjust` and `vjust` arguments to nudge the letters horizontally or
+vertically.
+
+``` r
+penguins |> tidyr::drop_na(sex, species) |> 
+  ggplot(aes(x=species, y=body_mass_g)) +
+  geom_boxplot() + 
+  facet_wrap(~sex) +
+  geom_tukey(where="box", vjust = -0.2, hjust=-0.2) +
+  ylab("Body mass (g)") +
+  xlab("Species") + egg::theme_article()
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-3-1.png)
+
+## Introduction to `boxplot_letters`
+
+The package also includes a convenience function `boxplot_letters` for
+quickly creating boxplots with compact letter displays using even
+simpler syntax.
+
+### Creating a simple boxplot
+
+``` r
+boxplot_letters(data = penguins, x = species, y = body_mass_g, 
+                vjust = -0.5, hjust = -0.3, type = "two-way", lab_size = 4)
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-4-1.png)
+
+### Creating multipanel plots
+
+`boxplot_letters` also supported faceting using the `group` argument.
+For example, we might want to break our penguin data down by sex:
+
+``` r
+boxplot_letters(data = penguins, x = species, y = body_mass_g,
+                group=sex, vjust=-0.5, hjust = -0.2)
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-5-1.png)
+
+Or look for sex differences within each of our three penguin species:
+
+``` r
+boxplot_letters(data = penguins, x = sex, y = body_mass_g, 
+                group = species, vjust = -0.5, hjust = -0.2)
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-6-1.png)
+
+When there is a grouping variable, there are (at least) two possible
+ways to run the statistics that may yield different results. By default
+a `two-way` test is conducted where `TukeyHSD` is run on a full ANOVA
+([aov](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/aov))
+with species and sex as an interaction, returning all pairwise
+comparisons of these two factors. If the comparisons are independent,
+`type="one-way"` can be selected to run independent Tukey tests within
+each group.
+
+``` r
+boxplot_letters(data = penguins, x = species, y = body_mass_g,
+                group = sex, type = "one-way", vjust = -0.5, hjust = -0.2)
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-7-1.png)
+
+Raw data can also be plotted in various ways using the `raw` argument to
+specify the desired geom for plotting raw data: e.g. `geom_point`
+(`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
+
+``` r
+boxplot_letters(data = penguins, x = species, y = body_mass_g, 
+                group = sex, vjust = -0.5, hjust=-0.2, raw = "jitter",
+                alpha = 0.6, pt_col = species)
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-8-1.png)
+
+## Other types of plots
+
+### Dynamite plot
+
+To create a dynamite plot (which I do not advocate):
+
+``` r
+data(iris)
+p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
+  geom_bar(aes(fill=Species), position = "identity", stat = "summary", fun = "mean", width = 0.6) +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.3) + 
+  geom_tukey(where = "cl_normal")
+p
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-9-1.png)
+
+### Dot plot
+
+``` r
+data(iris)
+p<-ggplot(data = iris, aes(x = Species, y = Petal.Width)) +
+  geom_jitter(aes(color = Species, fill = Species), alpha = 0.6, width = 0.15) +
+  geom_point(aes(fill = Species), position = "identity", stat = "summary", fun = "mean") +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.3) + 
+  geom_tukey(where = "cl_normal") + guides(fill = "none")
+p
+```
+
+![](ggtukey_files/figure-html/unnamed-chunk-10-1.png)
+
+## References
+
+Piepho, Hans-Peter. “An Algorithm for a Letter-Based Representation of
+All-Pairwise Comparisons.” *Journal of Computational and Graphical
+Statistics* 13, no. 2 (June 1, 2004): 456–66.
+<https://doi.org/10.1198/1061860043515>.
+
+Piepho, Hans-Peter. “Letters in Mean Comparisons: What They Do and Don’t
+Mean.” *Agronomy Journal* 110, no. 2 (2018): 431–34.
+<https://doi.org/10.2134/agronj2017.10.0580>.
+
+Graves S, Piepho H, Dorai-Raj LSwhfS (2019). multcompView:
+Visualizations of Paired Comparisons. R package version 0.1-8,
+([https://CRAN.R-project.org/package=multcompView).](https://CRAN.R-project.org/package=multcompView).)
