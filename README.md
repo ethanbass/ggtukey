@@ -15,8 +15,8 @@ It is currently recommended to install `ggtukey` from GitHub:
 
 
 ```
-install.packages("devtools")
-devtools::install_github("https://github.com/ethanbass/ggtukey/")
+if (!require("pak", quietly=TRUE)) install.packages("pak")
+pak::pak("ethanbass/ggtukey")
 ```
 
 or from [R Universe](https://ethanbass.r-universe.dev/):
