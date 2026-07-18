@@ -1,6 +1,7 @@
 # ggtukey
 
 ``` r
+
 library(ggtukey)
 library(ggplot2)
 library(palmerpenguins)
@@ -26,6 +27,7 @@ displays](https://en.wikipedia.org/wiki/Compact_letter_display) onto
 [ggplot2](https://ggplot2.tidyverse.org/) figures.
 
 ``` r
+
 penguins |> tidyr::drop_na(sex, species) |> 
   ggplot(aes(x = species, y = body_mass_g)) +
   geom_boxplot() + 
@@ -53,11 +55,12 @@ the `hjust` and `vjust` arguments to nudge the letters horizontally or
 vertically.
 
 ``` r
+
 penguins |> tidyr::drop_na(sex, species) |> 
   ggplot(aes(x=species, y=body_mass_g)) +
   geom_boxplot() + 
   facet_wrap(~sex) +
-  geom_tukey(where="box", vjust = -0.2, hjust=-0.2) +
+  geom_tukey(where = "box", vjust = -0.2, hjust=-0.2) +
   ylab("Body mass (g)") +
   xlab("Species") + egg::theme_article()
 ```
@@ -73,6 +76,7 @@ simpler syntax.
 ### Creating a simple boxplot
 
 ``` r
+
 boxplot_letters(data = penguins, x = species, y = body_mass_g, 
                 vjust = -0.5, hjust = -0.3, type = "two-way", lab_size = 4)
 ```
@@ -85,6 +89,7 @@ boxplot_letters(data = penguins, x = species, y = body_mass_g,
 For example, we might want to break our penguin data down by sex:
 
 ``` r
+
 boxplot_letters(data = penguins, x = species, y = body_mass_g,
                 group=sex, vjust=-0.5, hjust = -0.2)
 ```
@@ -94,6 +99,7 @@ boxplot_letters(data = penguins, x = species, y = body_mass_g,
 Or look for sex differences within each of our three penguin species:
 
 ``` r
+
 boxplot_letters(data = penguins, x = sex, y = body_mass_g, 
                 group = species, vjust = -0.5, hjust = -0.2)
 ```
@@ -110,6 +116,7 @@ comparisons of these two factors. If the comparisons are independent,
 each group.
 
 ``` r
+
 boxplot_letters(data = penguins, x = species, y = body_mass_g,
                 group = sex, type = "one-way", vjust = -0.5, hjust = -0.2)
 ```
@@ -121,6 +128,7 @@ specify the desired geom for plotting raw data: e.g. `geom_point`
 (`points`), `geom_dotplot` (`dots`), `geom_jitter` (`jitter`).
 
 ``` r
+
 boxplot_letters(data = penguins, x = species, y = body_mass_g, 
                 group = sex, vjust = -0.5, hjust=-0.2, raw = "jitter",
                 alpha = 0.6, pt_col = species)
@@ -135,6 +143,7 @@ boxplot_letters(data = penguins, x = species, y = body_mass_g,
 To create a dynamite plot (which I do not advocate):
 
 ``` r
+
 data(iris)
 p<-ggplot(data = iris, aes(x=Species, y=Petal.Width)) +
   geom_bar(aes(fill=Species), position = "identity", stat = "summary", fun = "mean", width = 0.6) +
@@ -148,6 +157,7 @@ p
 ### Dot plot
 
 ``` r
+
 data(iris)
 p<-ggplot(data = iris, aes(x = Species, y = Petal.Width)) +
   geom_jitter(aes(color = Species, fill = Species), alpha = 0.6, width = 0.15) +

@@ -74,11 +74,16 @@ boxplot_letters(
 - where:
 
   Where to put the letters. Either above the box (`box`) or upper
-  whisker (`whisker`) of a boxplot; at the `mean` or `median`; or at the
-  top of the error bars calculated from the standard error (`se`),
-  standard deviation `sd`, or 95% confidence intervals returned by
-  [`smean.cl.normal`](https://rdrr.io/pkg/Hmisc/man/smean.sd.html), or
-  [`smean.cl.boot`](https://rdrr.io/pkg/Hmisc/man/smean.sd.html).
+  whisker (`whisker`) of a boxplot; at the `mean` or `median` of the
+  distribution; at the top of the error bars calculated from the
+  standard error (`se`), standard deviation `sd`, or 95% confidence
+  intervals returned by
+  [`Hmisc::smean.cl.normal()`](https://rdrr.io/pkg/Hmisc/man/smean.sd.html)
+  (`cl_normal`), or
+  [`Hmisc::smean.cl.boot()`](https://rdrr.io/pkg/Hmisc/man/smean.sd.html)
+  (`cl_boot`); or a fixed numeric y-position. A single number is
+  recycled across all groups; a vector must have one value per
+  group/facet, matching sorted group order.
 
 - raw:
 

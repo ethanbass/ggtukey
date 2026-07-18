@@ -11,12 +11,12 @@ Source:
 [`inst/CITATION`](https://github.com/ethanbass/ggtukey/blob/main/inst/CITATION)
 
 Bass, E. (2025). ggtukey: Compact Letter Displays for 'ggplot2' (version
-0.5.0).
+0.5.1).
 
     @Manual{,
       title = {ggtukey: Compact Letter Displays for 'ggplot2'},
       author = {Ethan Bass},
       year = {2025},
-      note = {version 0.5.0},
+      note = {version 0.5.1},
       url = {https://ethanbass.github.io/ggtukey/},
     }
