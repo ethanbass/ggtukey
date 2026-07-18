@@ -26,26 +26,26 @@ get_tukey_letters <- function(data, x, y, group = NULL,
                                         "cl_normal", "cl_boot"),
                               threshold = 0.05, reversed = FALSE){
   test <- match.arg(test, c("tukey", "kruskalmc", "dunn"))
-  where <- match.arg(where, c("box", "whisker", "mean","median", "se", "sd",
-                              "cl_normal", "cl_boot"))
+  if (!is.numeric(where)){
+    where <- match.arg(where, c("box", "whisker", "mean","median", "se", "sd",
+                                "cl_normal", "cl_boot"))
+  }
   type <- match.arg(type, c("two-way", "one-way"))
-  # if (any(grepl("-", levels(data[,rlang::as_name(x), drop = TRUE])))){
-  #   stop("Factor names cannot contain dashes. Please recode factor levels before proceeding.")
-  # }
   if (inherits(x, "quosure") & is.null(group)){
-    letters.df <- place_tukey_letters(data = data, x = as_name(x), y = as_name(y),
+    letters.df <- place_tukey_letters(data = data, x = rlang::as_name(x),
+                                      y = rlang::as_name(y),
                                       test = test, where = where,
                                       threshold = threshold, reversed = reversed)
   } else{
     if (type == "two-way"){
-      letters.df <- place_tukey_letters(data = data, x = sapply(x, as_name),
-                                        y = as_name(y), test = test,
+      letters.df <- place_tukey_letters(data = data, x = sapply(x, rlang::as_name),
+                                        y = rlang::as_name(y), test = test,
                                         where = where, threshold = threshold,
                                         reversed = reversed)
     } else if (type == "one-way"){
-      letters.df <- purrr::map_dfr(unique(data[[as_name(group)]]), function(gr){
+      letters.df <- purrr::map_dfr(unique(data[[rlang::as_name(group)]]), function(gr){
         data %>% filter(!!group == gr) %>%
-          place_tukey_letters(x = as_name(x), y = as_name(y), test = test,
+          place_tukey_letters(x = rlang::as_name(x), y = rlang::as_name(y), test = test,
                               where = where, threshold = threshold,
                               reversed = reversed) %>%
           mutate(!!group := gr) %>% tibble::remove_rownames()
@@ -63,25 +63,19 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc", "dunn
   if (length(x) == 1){
     form <- form_let <- reformulate(x,y)
     xlab <- x
-  } else {
-    form <- reformulate(termlabels = paste(x, collapse="*"), y)
-    form_let <- reformulate(termlabels = paste(x, collapse=":"), y)
-    xlab <- paste(x, collapse=":")
+  } else{
+    form <- reformulate(termlabels = paste(x, collapse = "*"), y)
+    form_let <- reformulate(termlabels = paste(x, collapse = ":"), y)
+    xlab <- paste(x, collapse = ":")
     data[,xlab] <- apply(data[,x], 1, paste, collapse = ":")
   }
   if (test == "tukey"){
     tukey <- TukeyHSD(mod <- aov(form, data = data))
-    # tukey <- tukey[which(!is.na(tukey))]
-    # letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
-    # let <- multcompView::multcompLetters2(form_let, tukey[[xlab]][,"p adj"],
-    #                                       data = as.data.frame(data))
     diff <- tukey[[xlab]][,"p adj"]
-    # multcompLetters4(mod, tukey)$treatments
   } else if (test == "kruskalmc"){
     test <- pgirmess::kruskalmc(form, data = data, probs = threshold)
     diff <- test$dif.com[,"stat.signif"]
     names(diff) <- rownames(test$dif.com)
-    # letters.df <- data.frame("Letters" = multcompLetters2(formula = diff)$Letters)
   } else if (test == "dunn"){
     test <- rstatix::dunn_test(form_let, data = data)
     diff <- test$p
@@ -92,24 +86,36 @@ place_tukey_letters <- function(data, x, y, test = c("tukey", "kruskalmc", "dunn
                                         data = as.data.frame(data),
                                         reversed = reversed)
   letters.df <- data.frame(Letter = let$Letters)
-  # letters.df <- data.frame("Letter" = multcompLetters(tukey, threshold = threshold)$Letters)
-  letters.df[[xlab]] <- rownames(letters.df) #Create column based on rownames
+  letters.df[[xlab]] <- rownames(letters.df)
 
-  placement_fnc <- switch(where,
-                          "box" = get_quantile,
-                          "whisker" = get_whisker,
-                          "mean" = mean,
-                          "median" = median,
-                          "se" = get_sem,
-                          "sd" = get_sd,
-                          "cl_normal" = get_cl_normal,
-                          "cl_boot" = get_cl_boot)
-  placement <- data %>% # Create a dataframe to assign the letter position.
-    dplyr::group_by(.data[[xlab]]) %>%
-    dplyr::summarise("Placement.Value" = placement_fnc(.data[[y]]))
-  letters.df <- dplyr::left_join(letters.df, placement, by = xlab) # Merge dataframes
+  group_keys <- data |>
+    dplyr::distinct(.data[[xlab]]) %>%
+    dplyr::arrange(.data[[xlab]])
+  if (is.numeric(where)) {
+    if (length(where) != 1) {
+      stop("`where` must be a single number.")
+    }
+    placement <- data |>
+      dplyr::group_by(.data[[xlab]]) |>
+      dplyr::summarise("Placement.Value" = where)
+  } else {
+    placement_fnc <- switch(where,
+                            "box" = get_quantile,
+                            "whisker" = get_whisker,
+                            "mean" = mean,
+                            "median" = median,
+                            "se" = get_sem,
+                            "sd" = get_sd,
+                            "cl_normal" = get_cl_normal,
+                            "cl_boot" = get_cl_boot)
+    placement <- data %>%
+      dplyr::group_by(.data[[xlab]]) %>%
+      dplyr::summarise("Placement.Value" = placement_fnc(.data[[y]]))
+  }
+  letters.df <- dplyr::left_join(letters.df, placement, by = xlab)
   if (length(x) > 1){
-    letters.df <- dplyr::left_join(letters.df, unique(data[,c(xlab, x)]), by = xlab)
+    letters.df <- dplyr::left_join(letters.df, unique(data[,c(xlab, x)]),
+                                   by = xlab)
   }
   letters.df
 }

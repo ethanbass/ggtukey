@@ -34,9 +34,12 @@ an interaction term between \code{x} and \code{group}. Defaults to \code{two-way
 
 \item{where}{Where to put the letters. Either above the box (\code{box}) or
 upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
-\code{median}; or at the top of the error bars calculated from the standard
-error (\code{se}), standard deviation \code{sd}, or 95\% confidence intervals
-returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.}
+\code{median} of the distribution; at the top of the error bars calculated from
+the standard error (\code{se}), standard deviation \code{sd}, or 95\% confidence intervals
+returned by \code{\link[Hmisc:smean.cl.normal]{Hmisc::smean.cl.normal()}} (\code{cl_normal}), or
+\code{\link[Hmisc:smean.cl.boot]{Hmisc::smean.cl.boot()}} (\code{cl_boot}); or a fixed numeric y-position.
+A single number is recycled across all groups; a vector must have one
+value per group/facet, matching sorted group order.}
 
 \item{hjust}{Horizontal adjustment of the label. (Argument to
 \code{\link[ggplot2]{geom_text}}).}

@@ -1,3 +1,7 @@
+# ggtukey 0.5.1
+
+* Added support for a fixed numeric value to the `where` argument in `geom_tukey`, allowing letters to be placed at a specified y-position instead of a computed statistic.
+
 # ggtukey 0.5.0
 
 * Added support for Dunn's test as implemented in the `rstatix` package.

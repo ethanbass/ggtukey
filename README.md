@@ -55,7 +55,7 @@ For more examples and details on different options for customization, please con
 
 You can cite `ggtukey` as follows:
 
-Bass, E. (2022). ggtukey: Compact Letter Displays for 'ggplot2' (v0.4.0). (https://ethanbass.github.io/ggtukey/). 
+Bass, E. (2026). ggtukey: Compact Letter Displays for 'ggplot2' (v0.5.1). (https://ethanbass.github.io/ggtukey/). 
 
 # Further Reading
 

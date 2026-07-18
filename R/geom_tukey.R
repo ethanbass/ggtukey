@@ -7,11 +7,14 @@
 #' separate tests for each facet (\code{one-way}) or one (\code{two-way}) test with
 #' an interaction term between \code{x} and \code{group}. Defaults to \code{two-way}.
 #' @param threshold Statistical threshold for significance. Defaults to 0.05.
-#' @param where Where to put the letters. Either above the box (\code{box}) or
-#' upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
-#' \code{median}; or at the top of the error bars calculated from the standard
-#' error (\code{se}), standard deviation \code{sd}, or 95% confidence intervals
-#' returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.
+#' @param where Where to put the letters. Either above the box (`box`) or
+#' upper whisker (`whisker`) of a boxplot; at the `mean` or
+#' `median` of the distribution; at the top of the error bars calculated from
+#' the standard error (`se`), standard deviation `sd`, or 95% confidence intervals
+#' returned by [Hmisc::smean.cl.normal()] (`cl_normal`), or
+#' [Hmisc::smean.cl.boot()] (`cl_boot`); or a fixed numeric y-position.
+#' A single number is recycled across all groups; a vector must have one
+#' value per group/facet, matching sorted group order.
 #' @param hjust Horizontal adjustment of the label. (Argument to
 #' \code{\link[ggplot2]{geom_text}}).
 #' @param vjust Vertical adjustment of the label. (Argument to
@@ -56,7 +59,7 @@
 #' @export
 
 geom_tukey <- function(test = c("tukey", "kruskalmc", "dunn"),
-                       type=c("two-way", "one-way"), threshold = 0.05,
+                       type = c("two-way", "one-way"), threshold = 0.05,
                        where = c("box","whisker", "mean", "median", "se", "sd",
                                  "cl_normal", "cl_boot"),
                        hjust = 0, vjust = -0.2, geom="text",
@@ -69,8 +72,10 @@ geom_tukey <- function(test = c("tukey", "kruskalmc", "dunn"),
     type <- switch(type, "1"="one-way", "2"="two-way")
   }
   type <- match.arg(type, c("two-way", "one-way"))
-  where <- match.arg(where,  c("box", "whisker", "mean", "median",
-                               "se", "sd", "cl_normal", "cl_boot"))
+  if (!is.numeric(where)){
+    where <- match.arg(where,  c("box", "whisker", "mean", "median",
+                                 "se", "sd", "cl_normal", "cl_boot"))
+  }
   if (test == "kruskalmc"){
     if (type == "two-way"){
       warning("Only one-way tests are available with the kruskalmc method.",
@@ -109,7 +114,7 @@ geom_tukey_ <- function(p, test = c("tukey", "kruskalmc"), threshold = 0.05,
                         na.rm = TRUE, reversed = FALSE) {
   data <- p$data
   if (na.rm){
-    data <- drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
+    data <- tidyr::drop_na(data, !!p$mapping$x, !!p$facet$params$facets[[1]])
   }
   if (length(p$facet$params) == 0){
     data <- get_tukey_letters(data = data, x = p$mapping$x, y = p$mapping$y,

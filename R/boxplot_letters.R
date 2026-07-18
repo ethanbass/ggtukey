@@ -20,11 +20,14 @@
 #' test (with an interaction term between \code{x} and \code{group}). Defaults
 #' to \code{two-way}. This argument only applies if the Tukey test is selected,
 #' since there is no two-way Kruskal-Wallis test.
-#' @param where Where to put the letters. Either above the box (\code{box}) or
-#' upper whisker (\code{whisker}) of a boxplot; at the \code{mean} or
-#' \code{median}; or at the top of the error bars calculated from the standard
-#' error (\code{se}), standard deviation \code{sd}, or 95% confidence intervals
-#' returned by \code{\link[Hmisc]{smean.cl.normal}}, or \code{\link[Hmisc]{smean.cl.boot}}.
+#' @param where Where to put the letters. Either above the box (`box`) or
+#' upper whisker (`whisker`) of a boxplot; at the `mean` or
+#' `median` of the distribution; at the top of the error bars calculated from
+#' the standard error (`se`), standard deviation `sd`, or 95% confidence intervals
+#' returned by [Hmisc::smean.cl.normal()] (`cl_normal`), or
+#' [Hmisc::smean.cl.boot()] (`cl_boot`); or a fixed numeric y-position.
+#' A single number is recycled across all groups; a vector must have one
+#' value per group/facet, matching sorted group order.
 #' @param raw Whether to plot raw data and (if so), how. The current options are
 #' \code{none}, \code{\link[ggplot2]{geom_point}}, \code{\link[ggplot2]{geom_dotplot}}, or
 #' \code{\link[ggplot2]{geom_jitter}}.
@@ -72,8 +75,10 @@ boxplot_letters <- function(data, x, y, fill, group,
   test <- match.arg(test, c("tukey", "kruskalmc", "dunn"))
   raw <- match.arg(raw, c('none', 'points', 'dots', 'jitter'))
   type <- match.arg(type, c("two-way","one-way"))
-  where <- match.arg(where, c("box","whisker", "mean", "median",
-                              "se", "sd", "cl_normal", "cl_boot"))
+  if (!is.numeric(where)){
+    where <- match.arg(where, c("box","whisker", "mean", "median",
+                                "se", "sd", "cl_normal", "cl_boot"))
+  }
   x.s <- deparse(substitute(x))
   y.s <- deparse(substitute(y))
 
@@ -98,7 +103,7 @@ boxplot_letters <- function(data, x, y, fill, group,
   p <- data %>% # Dataframe from which data will be drawn
     ggplot(aes(x = {{x}}, y = {{y}})) +
     geom_box() +
-    theme_article() + #Clean, minimal theme courtesy of the "egg" package
+    egg::theme_article() +
     xlab(x.s)
 
   if (raw == "points"){

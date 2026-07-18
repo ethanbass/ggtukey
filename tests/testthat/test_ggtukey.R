@@ -9,6 +9,31 @@ test_that("geom_tukey works for simple boxplot", {
   vdiffr::expect_doppelganger("basic_tukey_plot", p)
 })
 
+test_that("geom_tukey works with `where = whisker`", {
+  skip_if_not_installed("vdiffr")
+  p_whisker <- penguins |> tidyr::drop_na(sex, species) |>
+    ggplot(aes(x=species, y=body_mass_g)) +
+    geom_boxplot() + geom_tukey(where = "whisker")
+  vdiffr::expect_doppelganger("tukey_plot_whisker", p_whisker)
+})
+
+test_that("geom_tukey works with `where = median`", {
+  skip_if_not_installed("vdiffr")
+  p_median <- penguins |> tidyr::drop_na(sex, species) |>
+    ggplot(aes(x=species, y=body_mass_g)) +
+    geom_boxplot() + geom_tukey(where = "median")
+  vdiffr::expect_doppelganger("tukey_plot_median", p_median)
+})
+
+test_that("geom_tukey works with `where = median`", {
+  skip_if_not_installed("vdiffr")
+  p_2450 <- penguins |> tidyr::drop_na(sex, species) |>
+    ggplot(aes(x=species, y=body_mass_g)) +
+    geom_boxplot() + geom_tukey(where = 2450)
+  vdiffr::expect_doppelganger("tukey_plot_2450", p_2450)
+})
+
+
 test_that("geom_tukey works for boxplot with facet", {
   skip_if_not_installed("vdiffr")
   p2 <- penguins |> tidyr::drop_na(sex, species) |>
@@ -27,11 +52,18 @@ test_that("geom_tukey works for boxplot with facet", {
   vdiffr::expect_doppelganger("faceted_tukey_plot_reversed", p_r)
 })
 
-test_that("boxplot_letters functions", {
+test_that("boxplot_letters works as intended", {
   p <- penguins |> tidyr::drop_na(sex, species) |>
     boxplot_letters(x = species, y=body_mass_g, fill="white") +
     theme_gray()
   vdiffr::expect_doppelganger("boxplot_letters_basic", p)
+})
+
+test_that("boxplot_letters works with fixed position", {
+  p_fixed <- penguins |> tidyr::drop_na(sex, species) |>
+    boxplot_letters(x = species, y=body_mass_g, fill="white", where = 6400) +
+    theme_gray()
+  vdiffr::expect_doppelganger("boxplot_letters_fixed", p_fixed)
 })
 
 test_that("boxplot_letters works with facet", {
@@ -46,7 +78,7 @@ test_that("boxplot_letters works with facet", {
   vdiffr::expect_doppelganger("boxplot_letters_faceted_reversed", p_r)
 })
 
-test_that("geom_tukey works for boxplot with facet", {
+test_that("geom_tukey works for boxplot with facet and kruskalmc test", {
   skip_if_not_installed("vdiffr")
   p <- penguins |> tidyr::drop_na(sex, species) |>
     ggplot(aes(x=species, y=body_mass_g)) + facet_wrap(~sex) +
@@ -58,7 +90,7 @@ test_that("geom_tukey works for boxplot with facet", {
     geom_boxplot() + geom_tukey(test="kruskalmc", type = 2))
 })
 
-test_that("geom_tukey works for boxplot with facet", {
+test_that("geom_tukey works for boxplot with facet and dunn test", {
   skip_if_not_installed("vdiffr")
   p1 <- penguins |> tidyr::drop_na(sex, species) |>
     ggplot(aes(x=species, y=body_mass_g)) + facet_wrap(~sex) +

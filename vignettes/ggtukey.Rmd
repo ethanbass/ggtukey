@@ -51,7 +51,7 @@ penguins |> tidyr::drop_na(sex, species) |>
   ggplot(aes(x=species, y=body_mass_g)) +
   geom_boxplot() + 
   facet_wrap(~sex) +
-  geom_tukey(where="box", vjust = -0.2, hjust=-0.2) +
+  geom_tukey(where = "box", vjust = -0.2, hjust=-0.2) +
   ylab("Body mass (g)") +
   xlab("Species") + egg::theme_article()
 ```
@@ -62,7 +62,7 @@ The package also includes a convenience function `boxplot_letters` for quickly c
 
 ## Creating a simple boxplot
 
-```{r, fig.width=6}
+```{r, fig.width = 6}
 boxplot_letters(data = penguins, x = species, y = body_mass_g, 
                 vjust = -0.5, hjust = -0.3, type = "two-way", lab_size = 4)
 ```
