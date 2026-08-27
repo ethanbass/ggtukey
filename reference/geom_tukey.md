@@ -95,7 +95,7 @@ geom_tukey(
 - reversed:
 
   Logical. Argument to
-  [`multcompLetters3`](https://rdrr.io/pkg/multcompView/man/multcompLetters.html).
+  [`multcompLetters3`](https://lselzer.github.io/multcompView/reference/multcompLetters.html).
   Determines whether order of letters should be reversed. Defaults to
   `FALSE`.
 

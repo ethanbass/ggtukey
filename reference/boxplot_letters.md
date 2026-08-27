@@ -4,7 +4,7 @@ Performs pairwise comparisons using
 [`TukeyHSD`](https://rdrr.io/r/stats/TukeyHSD.html) and produces
 boxplots with compact letter display showing significance pairwise
 differences. Letters are produced by
-[`multcompLetters`](https://rdrr.io/pkg/multcompView/man/multcompLetters.html).
+[`multcompLetters`](https://lselzer.github.io/multcompView/reference/multcompLetters.html).
 Plots are produced by
 [`ggplot2`](https://ggplot2.tidyverse.org/reference/ggplot2-package.html).
 Raw data can also be overlaid in various ways according to the value of
@@ -129,7 +129,7 @@ boxplot_letters(
 - reversed:
 
   Logical. Argument to
-  [`multcompLetters3`](https://rdrr.io/pkg/multcompView/man/multcompLetters.html).
+  [`multcompLetters3`](https://lselzer.github.io/multcompView/reference/multcompLetters.html).
   Determines whether order of letters should be reversed. Defaults to
   `FALSE`.
 
